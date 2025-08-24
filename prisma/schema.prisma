@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -11,85 +10,52 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User model
-model User {
+// Category model
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Feature model
+model Feature {
   id        String   @id @default(uuid())
-  email     String   @unique
   name      String
-  password  String
-  role      Role     @default(USER)
+  value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  products  Product[]
-  orders    Order[]
 }
 
 // Product model
 model Product {
   id          String   @id @default(uuid())
   name        String
+  slug        String   @unique
+  imageUrls   String[]
   description String
-  price       Float
-  imageUrl    String?
-  inventory   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating      Float    @default(0)
+  comment     String?
   category    Category @relation(fields: [categoryId], references: [id])
   categoryId  String
-  orderItems  OrderItem[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  @@index([userId])
   @@index([categoryId])
 }
 
-// Category model
-model Category {
-  id        String    @id @default(uuid())
-  name      String    @unique
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-}
-
-// Order model
-model Order {
-  id          String      @id @default(uuid())
-  userId      String
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  status      OrderStatus @default(PENDING)
-  totalAmount Float
-  items       OrderItem[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-
-  @@index([userId])
-}
-
-// OrderItem model
-model OrderItem {
-  id        String  @id @default(uuid())
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productId String
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  quantity  Int
-  price     Float
-
-  @@index([orderId])
-  @@index([productId])
+// User model
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
   USER
   ADMIN
-}
-
-enum OrderStatus {
-  PENDING
-  PROCESSING
-  SHIPPED
-  DELIVERED
-  CANCELLED
 }
