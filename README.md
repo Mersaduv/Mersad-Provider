@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# پروژه Next.js + Prisma + Vercel Postgres با پشتیبانی از RTL
 
-## Getting Started
+این پروژه یک نمونه کامل از یک وب‌سایت فارسی با پشتیبانی از راست به چپ (RTL) است که با استفاده از فناوری‌های زیر ساخته شده است:
 
-First, run the development server:
+- **Next.js 15** با معماری App Router
+- **Prisma ORM** برای ارتباط با دیتابیس
+- **Vercel Postgres** به عنوان دیتابیس ابری
+- **Tailwind CSS** برای طراحی رابط کاربری
+- **TypeScript** برای توسعه تایپ‌سیف
+
+## امکانات
+
+- پشتیبانی کامل از راست به چپ (RTL) برای زبان فارسی
+- فونت فارسی Vazirmatn
+- مدل‌های داده‌ای کامل با Prisma
+- API Routes برای تعامل با دیتابیس
+- رابط کاربری زیبا با استفاده از Tailwind CSS
+
+## ساختار پروژه
+
+```
+/
+├── prisma/              # فایل‌های Prisma و مدل‌های داده
+├── public/              # فایل‌های استاتیک
+└── src/
+    ├── app/             # مسیریابی App Router
+    │   ├── api/         # API Routes
+    │   ├── products/    # صفحات محصولات
+    │   └── page.tsx     # صفحه اصلی
+    ├── components/      # کامپوننت‌های UI
+    ├── lib/             # توابع و ابزارهای کمکی
+    └── generated/       # فایل‌های تولید شده توسط Prisma
+```
+
+## راه‌اندازی پروژه
+
+### پیش‌نیازها
+
+- Node.js 18.0.0 یا بالاتر
+- npm یا yarn
+- یک دیتابیس PostgreSQL یا حساب Vercel برای استفاده از Vercel Postgres
+
+### نصب و راه‌اندازی
+
+1. پروژه را کلون کنید:
+
+```bash
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+```
+
+2. وابستگی‌ها را نصب کنید:
+
+```bash
+npm install
+# یا
+yarn install
+```
+
+3. فایل `.env` را در ریشه پروژه ایجاد کنید و متغیر محیطی دیتابیس را تنظیم کنید:
+
+```
+DATABASE_URL="postgresql://username:password@localhost:5432/mydb?schema=public"
+```
+
+4. مدل‌های Prisma را به دیتابیس منتقل کنید:
+
+```bash
+npx prisma migrate dev --name init
+```
+
+5. سرور توسعه را راه‌اندازی کنید:
 
 ```bash
 npm run dev
-# or
+# یا
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+6. در مرورگر خود به آدرس `http://localhost:3000` مراجعه کنید.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## استقرار در Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+این پروژه برای استقرار در Vercel بهینه‌سازی شده است. برای استقرار:
 
-## Learn More
+1. پروژه را به یک مخزن GitHub منتقل کنید.
+2. یک حساب در Vercel ایجاد کنید.
+3. یک پروژه جدید در Vercel ایجاد کنید و مخزن GitHub خود را به آن متصل کنید.
+4. یک دیتابیس Vercel Postgres ایجاد کنید.
+5. متغیر محیطی `DATABASE_URL` را با اطلاعات دیتابیس Vercel Postgres تنظیم کنید.
+6. استقرار را آغاز کنید!
 
-To learn more about Next.js, take a look at the following resources:
+## توسعه بیشتر
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+برای توسعه بیشتر این پروژه می‌توانید موارد زیر را اضافه کنید:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- سیستم احراز هویت کاربران
+- سبد خرید و پرداخت آنلاین
+- پنل مدیریت برای ادمین‌ها
+- بهینه‌سازی SEO
+- اضافه کردن تست‌ها
 
-## Deploy on Vercel
+## مجوز
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+این پروژه تحت مجوز MIT منتشر شده است.
