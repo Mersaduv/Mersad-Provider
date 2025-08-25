@@ -2,23 +2,26 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-interface Category {
-  id: string;
-  name: string;
-}
 
 interface Attribute {
   id: string;
   name: string;
   value: string;
   categoryId: string;
-  category: Category;
+  category: {
+    id: string;
+    name: string;
+  };
   createdAt: string;
   updatedAt: string;
+}
+
+interface Category {
+  id: string;
+  name: string;
 }
 
 export default function AttributesManagement() {
@@ -34,6 +37,10 @@ export default function AttributesManagement() {
     categoryId: ""
   });
   const [editingId, setEditingId] = useState<string | null>(null);
+  
+  // Refs for auto-focus
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -45,6 +52,18 @@ export default function AttributesManagement() {
 
     fetchData();
   }, [session, status, router]);
+
+  // Auto-focus effect when form is shown
+  useEffect(() => {
+    if (showForm && nameInputRef.current) {
+      // Small delay to ensure the form is rendered
+      setTimeout(() => {
+        nameInputRef.current?.focus();
+        // Scroll to form
+        formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [showForm]);
 
   const fetchData = async () => {
     try {
@@ -72,6 +91,11 @@ export default function AttributesManagement() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!formData.name || !formData.value || !formData.categoryId) {
+      alert("Please fill in all fields");
+      return;
+    }
+
     try {
       const url = editingId 
         ? `/api/attributes/${editingId}` 
@@ -92,6 +116,9 @@ export default function AttributesManagement() {
         setShowForm(false);
         setEditingId(null);
         fetchData();
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.error}`);
       }
     } catch (error) {
       console.error("Error saving attribute:", error);
@@ -118,6 +145,9 @@ export default function AttributesManagement() {
 
       if (response.ok) {
         fetchData();
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.error}`);
       }
     } catch (error) {
       console.error("Error deleting attribute:", error);
@@ -164,38 +194,42 @@ export default function AttributesManagement() {
           </div>
 
           {showForm && (
-            <div className="bg-white p-6 rounded-lg shadow mb-6">
+            <div ref={formRef} className="bg-white p-6 rounded-lg shadow mb-6">
               <h2 className="text-xl font-semibold mb-4">
                 {editingId ? "Edit Attribute" : "Add New Attribute"}
               </h2>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Name *
+                    </label>
+                    <input
+                      ref={nameInputRef}
+                      type="text"
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Value *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                      value={formData.value}
+                      onChange={(e) => setFormData({ ...formData, value: e.target.value })}
+                    />
+                  </div>
                 </div>
+                
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Value
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    value={formData.value}
-                    onChange={(e) => setFormData({ ...formData, value: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Category
+                    Category *
                   </label>
                   <select
                     required
@@ -211,6 +245,7 @@ export default function AttributesManagement() {
                     ))}
                   </select>
                 </div>
+
                 <div className="flex gap-2">
                   <Button type="submit" className="bg-green-600 hover:bg-green-700">
                     {editingId ? "Update" : "Create"}
@@ -233,13 +268,10 @@ export default function AttributesManagement() {
                         {attribute.name}
                       </h3>
                       <p className="text-gray-600 mt-1">
-                        Value: {attribute.value}
+                        Value: <span className="font-medium">{attribute.value}</span>
                       </p>
                       <p className="text-sm text-gray-500 mt-1">
-                        Category: {attribute.category.name}
-                      </p>
-                      <p className="text-sm text-gray-500 mt-1">
-                        Created: {new Date(attribute.createdAt).toLocaleDateString()}
+                        Category: {attribute.category.name} | Created: {new Date(attribute.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="flex gap-2">
