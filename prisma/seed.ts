@@ -1,114 +1,83 @@
 import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  // پاک کردن داده‌های موجود
-  await prisma.product.deleteMany()
-  await prisma.feature.deleteMany()
-  await prisma.category.deleteMany()
-  await prisma.user.deleteMany()
+  // Create admin user
+  const hashedPassword = await bcrypt.hash('admin123', 10)
   
-  console.log('داده‌های قبلی پاک شد')
-  
-  // ایجاد کاربران نمونه
-  const admin = await prisma.user.create({
-    data: {
-      name: 'مدیر سیستم',
+  const adminUser = await prisma.user.upsert({
+    where: { email: 'admin@example.com' },
+    update: {},
+    create: {
+      email: 'admin@example.com',
+      name: 'Admin User',
+      password: hashedPassword,
       role: 'ADMIN',
-    }
+    },
   })
-  
-  const user = await prisma.user.create({
-    data: {
-      name: 'کاربر معمولی',
-      role: 'USER',
-    }
+
+  // Create some sample categories
+  const electronicsCategory = await prisma.category.upsert({
+    where: { name: 'Electronics' },
+    update: {},
+    create: {
+      name: 'Electronics',
+      description: 'Electronic devices and gadgets',
+    },
   })
-  
-  console.log('کاربران ایجاد شدند:', { admin, user })
-  
-  // ایجاد دسته‌بندی‌های نمونه
-  const digitalCategory = await prisma.category.create({
-    data: {
-      name: 'کالای دیجیتال',
-      description: 'لوازم الکترونیکی و دیجیتال',
-    }
+
+  const clothingCategory = await prisma.category.upsert({
+    where: { name: 'Clothing' },
+    update: {},
+    create: {
+      name: 'Clothing',
+      description: 'Fashion and apparel',
+    },
   })
-  
-  const clothingCategory = await prisma.category.create({
-    data: {
-      name: 'پوشاک',
-      description: 'انواع لباس و پوشاک',
-    }
-  })
-  
-  console.log('دسته‌بندی‌ها ایجاد شدند:', { digitalCategory, clothingCategory })
-  
-  // ایجاد ویژگی‌های نمونه
-  const colorFeature = await prisma.feature.create({
-    data: {
-      name: 'رنگ',
-      value: 'مشکی',
-    }
-  })
-  
-  const sizeFeature = await prisma.feature.create({
-    data: {
-      name: 'سایز',
-      value: 'متوسط',
-    }
-  })
-  
-  console.log('ویژگی‌ها ایجاد شدند:', { colorFeature, sizeFeature })
-  
-  // ایجاد محصولات نمونه
-  const smartphone = await prisma.product.create({
-    data: {
-      name: 'گوشی هوشمند شیائومی',
-      slug: 'xiaomi-smartphone',
-      description: 'گوشی هوشمند شیائومی با صفحه نمایش 6.5 اینچی و دوربین 64 مگاپیکسلی',
-      imageUrls: [
-        'https://example.com/images/smartphone1.jpg',
-        'https://example.com/images/smartphone2.jpg',
-      ],
-      rating: 4.5,
-      comment: 'محصول پرطرفدار با کیفیت عالی',
-      categoryId: digitalCategory.id,
-    }
-  })
-  
-  const laptop = await prisma.product.create({
-    data: {
-      name: 'لپ تاپ ایسوس',
-      slug: 'asus-laptop',
-      description: 'لپ تاپ ایسوس با پردازنده Core i7 و کارت گرافیک قدرتمند',
-      imageUrls: [
-        'https://example.com/images/laptop1.jpg',
-        'https://example.com/images/laptop2.jpg',
-      ],
-      rating: 4.8,
-      comment: 'مناسب برای بازی و کارهای حرفه‌ای',
-      categoryId: digitalCategory.id,
-    }
-  })
-  
-  const tShirt = await prisma.product.create({
-    data: {
-      name: 'تیشرت مردانه',
-      slug: 'mens-tshirt',
-      description: 'تیشرت مردانه نخی با طرح ساده',
-      imageUrls: [
-        'https://example.com/images/tshirt1.jpg',
-        'https://example.com/images/tshirt2.jpg',
-      ],
-      rating: 4.2,
-      comment: 'جنس نخ پنبه درجه یک',
+
+  // Create some sample attributes
+  await prisma.attribute.upsert({
+    where: { 
+      id: 'attr-1' // Using a fixed ID for upsert
+    },
+    update: {},
+    create: {
+      id: 'attr-1',
+      name: 'Color',
+      value: 'Red',
       categoryId: clothingCategory.id,
-    }
+    },
   })
-  
-  console.log('محصولات ایجاد شدند:', { smartphone, laptop, tShirt })
+
+  await prisma.attribute.upsert({
+    where: { 
+      id: 'attr-2'
+    },
+    update: {},
+    create: {
+      id: 'attr-2',
+      name: 'Size',
+      value: 'Large',
+      categoryId: clothingCategory.id,
+    },
+  })
+
+  await prisma.attribute.upsert({
+    where: { 
+      id: 'attr-3'
+    },
+    update: {},
+    create: {
+      id: 'attr-3',
+      name: 'Brand',
+      value: 'Samsung',
+      categoryId: electronicsCategory.id,
+    },
+  })
+
+  console.log({ adminUser, electronicsCategory, clothingCategory })
 }
 
 main()

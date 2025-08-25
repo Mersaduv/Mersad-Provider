@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,17 +7,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Category model
 model Category {
-  id          String    @id @default(uuid())
-  name        String    @unique
+  id          String      @id @default(uuid())
+  name        String      @unique
   description String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   products    Product[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  attributes  Attribute[]
 }
 
-// Feature model
+model Attribute {
+  id         String   @id @default(uuid())
+  name       String
+  value      String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([categoryId])
+}
+
 model Feature {
   id        String   @id @default(uuid())
   name      String
@@ -29,7 +37,6 @@ model Feature {
   updatedAt DateTime @updatedAt
 }
 
-// Product model
 model Product {
   id          String   @id @default(uuid())
   name        String
@@ -38,18 +45,19 @@ model Product {
   description String
   rating      Float    @default(0)
   comment     String?
-  category    Category @relation(fields: [categoryId], references: [id])
   categoryId  String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  category    Category @relation(fields: [categoryId], references: [id])
 
   @@index([categoryId])
 }
 
-// User model
 model User {
   id        String   @id @default(uuid())
   name      String
+  email     String   @unique
+  password  String
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
