@@ -107,6 +107,7 @@ export default function CategoriesManagement() {
     try {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("type", "categories");
 
       const response = await fetch("/api/upload", {
         method: "POST",
@@ -118,11 +119,11 @@ export default function CategoriesManagement() {
         setFormData(prev => ({ ...prev, image: result.imagePath }));
       } else {
         const errorData = await response.json();
-        alert(`Upload failed: ${errorData.error}`);
+        alert(`آپلود ناموفق بود: ${errorData.error}`);
       }
     } catch (error) {
       console.error("Error uploading image:", error);
-      alert("Failed to upload image");
+      alert("آپلود تصویر ناموفق بود");
     } finally {
       setUploading(false);
     }
@@ -165,7 +166,7 @@ export default function CategoriesManagement() {
         fetchCategories();
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.error}`);
+        alert(`خطا: ${errorData.error}`);
       }
     } catch (error) {
       console.error("Error saving category:", error);
@@ -188,7 +189,7 @@ export default function CategoriesManagement() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this category?")) return;
+    if (!confirm("آیا مطمئن هستید که می‌خواهید این دسته‌بندی را حذف کنید؟")) return;
     
     try {
       const response = await fetch(`/api/categories/${id}`, {
@@ -199,7 +200,7 @@ export default function CategoriesManagement() {
         fetchCategories();
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.error}`);
+        alert(`خطا: ${errorData.error}`);
       }
     } catch (error) {
       console.error("Error deleting category:", error);
@@ -244,7 +245,7 @@ export default function CategoriesManagement() {
   if (status === "loading" || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+        <div className="text-xl">در حال بارگذاری...</div>
       </div>
     );
   }
@@ -259,17 +260,17 @@ export default function CategoriesManagement() {
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-900">
-              Categories Management
+              مدیریت دسته‌بندی‌ها
             </h1>
             <div className="flex gap-4">
               <Button
                 onClick={() => setShowForm(true)}
                 className="bg-blue-600 hover:bg-blue-700"
               >
-                Add New Category
+                افزودن دسته‌بندی جدید
               </Button>
               <Link href="/admin/dashboard">
-                <Button variant="outline">Back to Dashboard</Button>
+                <Button variant="outline">بازگشت به داشبورد</Button>
               </Link>
             </div>
           </div>
@@ -277,13 +278,13 @@ export default function CategoriesManagement() {
           {showForm && (
             <div ref={formRef} className="bg-white p-6 rounded-lg shadow mb-6">
               <h2 className="text-xl font-semibold mb-4">
-                {editingId ? "Edit Category" : "Add New Category"}
+                {editingId ? "ویرایش دسته‌بندی" : "افزودن دسته‌بندی جدید"}
               </h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Name *
+                      نام *
                     </label>
                     <input
                       ref={nameInputRef}
@@ -296,7 +297,7 @@ export default function CategoriesManagement() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Slug *
+                      نامک *
                     </label>
                     <input
                       type="text"
@@ -310,7 +311,7 @@ export default function CategoriesManagement() {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Description *
+                    توضیحات *
                   </label>
                   <textarea
                     required
@@ -324,14 +325,14 @@ export default function CategoriesManagement() {
                 {/* Image Upload Section */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Category Image
+                    تصویر دسته‌بندی
                   </label>
                   <div className="flex items-center gap-4">
                     {formData.image && (
                       <div className="relative">
                         <img
                           src={formData.image}
-                          alt="Category preview"
+                          alt="پیش‌نمایش دسته‌بندی"
                           className="w-24 h-24 object-cover rounded-lg border"
                         />
                         <button
@@ -358,10 +359,10 @@ export default function CategoriesManagement() {
                         disabled={uploading}
                         className="bg-gray-100 hover:bg-gray-200"
                       >
-                        {uploading ? "Uploading..." : formData.image ? "Change Image" : "Upload Image"}
+                        {uploading ? "در حال آپلود..." : formData.image ? "تغییر تصویر" : "آپلود تصویر"}
                       </Button>
                       <p className="text-xs text-gray-500 mt-1">
-                        Supports: JPEG, PNG, GIF, WebP (Max: 5MB)
+                        فرمت‌های پشتیبانی شده: JPEG, PNG, GIF, WebP (حداکثر: 5 مگابایت)
                       </p>
                     </div>
                   </div>
@@ -370,14 +371,14 @@ export default function CategoriesManagement() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Parent Category
+                      دسته‌بندی والد
                     </label>
                     <select
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       value={formData.parentId}
                       onChange={(e) => setFormData({ ...formData, parentId: e.target.value })}
                     >
-                      <option value="">No Parent (Root Category)</option>
+                      <option value="">بدون والد (دسته‌بندی اصلی)</option>
                       {getAvailableParents(editingId || undefined).map((category) => (
                         <option key={category.id} value={category.id}>
                           {getLevelIndicator(category.level)}{category.name}
@@ -388,7 +389,7 @@ export default function CategoriesManagement() {
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Level
+                      سطح
                     </label>
                     <input
                       type="number"
@@ -398,12 +399,12 @@ export default function CategoriesManagement() {
                       value={formData.level}
                       onChange={(e) => setFormData({ ...formData, level: parseInt(e.target.value) })}
                     />
-                    <p className="text-xs text-gray-500 mt-1">Auto-calculated based on parent</p>
+                    <p className="text-xs text-gray-500 mt-1">بر اساس والد به صورت خودکار محاسبه می‌شود</p>
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Order
+                      ترتیب
                     </label>
                     <input
                       type="number"
@@ -424,16 +425,16 @@ export default function CategoriesManagement() {
                     onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
                   />
                   <label htmlFor="isActive" className="text-sm font-medium text-gray-700">
-                    Active
+                    فعال
                   </label>
                 </div>
 
                 <div className="flex gap-2">
                   <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-                    {editingId ? "Update" : "Create"}
+                    {editingId ? "بروزرسانی" : "ایجاد"}
                   </Button>
                   <Button type="button" onClick={handleCancel} variant="outline">
-                    Cancel
+                    انصراف
                   </Button>
                 </div>
               </form>
@@ -460,11 +461,11 @@ export default function CategoriesManagement() {
                           </h3>
                           <div className="flex items-center gap-2 mt-1">
                             <span className="text-xs bg-gray-100 px-2 py-1 rounded">
-                              Level {category.level}
+                              سطح {category.level}
                             </span>
                             {!category.isActive && (
                               <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
-                                Inactive
+                                غیرفعال
                               </span>
                             )}
                           </div>
@@ -474,30 +475,30 @@ export default function CategoriesManagement() {
                         {category.description}
                       </p>
                       <p className="text-sm text-gray-500 mt-1">
-                        Slug: <code className="bg-gray-100 px-1 rounded">{category.slug}</code>
+                        نامک: <code className="bg-gray-100 px-1 rounded">{category.slug}</code>
                         {category.parent && (
                           <span className="ml-2">
-                            Parent: {category.parent.name}
+                            والد: {category.parent.name}
                           </span>
                         )}
                         {category._count.children > 0 && (
                           <span className="ml-2">
-                            Children: {category._count.children}
+                            زیرمجموعه: {category._count.children}
                           </span>
                         )}
                         {category._count.products > 0 && (
                           <span className="ml-2">
-                            Products: {category._count.products}
+                            محصولات: {category._count.products}
                           </span>
                         )}
                         {category._count.attributes > 0 && (
                           <span className="ml-2">
-                            Attributes: {category._count.attributes}
+                            ویژگی‌ها: {category._count.attributes}
                           </span>
                         )}
                       </p>
                       <p className="text-sm text-gray-500 mt-1">
-                        Order: {category.order} | Created: {new Date(category.createdAt).toLocaleDateString()}
+                        ترتیب: {category.order} | ایجاد شده: {new Date(category.createdAt).toLocaleDateString('fa-IR')}
                       </p>
                     </div>
                     <div className="flex gap-2">
@@ -506,7 +507,7 @@ export default function CategoriesManagement() {
                         variant="outline"
                         size="sm"
                       >
-                        Edit
+                        ویرایش
                       </Button>
                       <Button
                         onClick={() => handleDelete(category.id)}
@@ -515,7 +516,7 @@ export default function CategoriesManagement() {
                         className="text-red-600 hover:text-red-700"
                         disabled={category._count.children > 0 || category._count.products > 0}
                       >
-                        Delete
+                        حذف
                       </Button>
                     </div>
                   </div>

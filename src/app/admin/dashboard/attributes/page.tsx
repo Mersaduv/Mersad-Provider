@@ -92,7 +92,7 @@ export default function AttributesManagement() {
     e.preventDefault();
     
     if (!formData.name || !formData.value || !formData.categoryId) {
-      alert("Please fill in all fields");
+      alert("لطفاً تمام فیلدها را پر کنید");
       return;
     }
 
@@ -118,7 +118,7 @@ export default function AttributesManagement() {
         fetchData();
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.error}`);
+        alert(`خطا: ${errorData.error}`);
       }
     } catch (error) {
       console.error("Error saving attribute:", error);
@@ -136,7 +136,7 @@ export default function AttributesManagement() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this attribute?")) return;
+    if (!confirm("آیا مطمئن هستید که می‌خواهید این ویژگی را حذف کنید؟")) return;
     
     try {
       const response = await fetch(`/api/attributes/${id}`, {
@@ -147,7 +147,7 @@ export default function AttributesManagement() {
         fetchData();
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.error}`);
+        alert(`خطا: ${errorData.error}`);
       }
     } catch (error) {
       console.error("Error deleting attribute:", error);
@@ -163,7 +163,7 @@ export default function AttributesManagement() {
   if (status === "loading" || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+        <div className="text-xl">در حال بارگذاری...</div>
       </div>
     );
   }
@@ -178,17 +178,17 @@ export default function AttributesManagement() {
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-900">
-              Attributes Management
+              مدیریت ویژگی‌ها
             </h1>
             <div className="flex gap-4">
               <Button
                 onClick={() => setShowForm(true)}
                 className="bg-green-600 hover:bg-green-700"
               >
-                Add New Attribute
+                افزودن ویژگی جدید
               </Button>
               <Link href="/admin/dashboard">
-                <Button variant="outline">Back to Dashboard</Button>
+                <Button variant="outline">بازگشت به داشبورد</Button>
               </Link>
             </div>
           </div>
@@ -196,13 +196,13 @@ export default function AttributesManagement() {
           {showForm && (
             <div ref={formRef} className="bg-white p-6 rounded-lg shadow mb-6">
               <h2 className="text-xl font-semibold mb-4">
-                {editingId ? "Edit Attribute" : "Add New Attribute"}
+                {editingId ? "ویرایش ویژگی" : "افزودن ویژگی جدید"}
               </h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Name *
+                      نام *
                     </label>
                     <input
                       ref={nameInputRef}
@@ -215,7 +215,7 @@ export default function AttributesManagement() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Value *
+                      مقدار *
                     </label>
                     <input
                       type="text"
@@ -229,7 +229,7 @@ export default function AttributesManagement() {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Category *
+                    دسته‌بندی *
                   </label>
                   <select
                     required
@@ -237,7 +237,7 @@ export default function AttributesManagement() {
                     value={formData.categoryId}
                     onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                   >
-                    <option value="">Select a category</option>
+                    <option value="">انتخاب دسته‌بندی</option>
                     {categories.map((category) => (
                       <option key={category.id} value={category.id}>
                         {category.name}
@@ -248,10 +248,10 @@ export default function AttributesManagement() {
 
                 <div className="flex gap-2">
                   <Button type="submit" className="bg-green-600 hover:bg-green-700">
-                    {editingId ? "Update" : "Create"}
+                    {editingId ? "بروزرسانی" : "ایجاد"}
                   </Button>
                   <Button type="button" onClick={handleCancel} variant="outline">
-                    Cancel
+                    انصراف
                   </Button>
                 </div>
               </form>
@@ -268,10 +268,10 @@ export default function AttributesManagement() {
                         {attribute.name}
                       </h3>
                       <p className="text-gray-600 mt-1">
-                        Value: <span className="font-medium">{attribute.value}</span>
+                        مقدار: <span className="font-medium">{attribute.value}</span>
                       </p>
                       <p className="text-sm text-gray-500 mt-1">
-                        Category: {attribute.category.name} | Created: {new Date(attribute.createdAt).toLocaleDateString()}
+                        دسته‌بندی: {attribute.category.name} | ایجاد شده: {new Date(attribute.createdAt).toLocaleDateString('fa-IR')}
                       </p>
                     </div>
                     <div className="flex gap-2">
@@ -280,7 +280,7 @@ export default function AttributesManagement() {
                         variant="outline"
                         size="sm"
                       >
-                        Edit
+                        ویرایش
                       </Button>
                       <Button
                         onClick={() => handleDelete(attribute.id)}
@@ -288,7 +288,7 @@ export default function AttributesManagement() {
                         size="sm"
                         className="text-red-600 hover:text-red-700"
                       >
-                        Delete
+                        حذف
                       </Button>
                     </div>
                   </div>

@@ -60,8 +60,6 @@ model Product {
   slug        String   @unique
   imageUrls   String[]
   description String
-  rating      Float    @default(0)
-  comment     String?
   categoryId  String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

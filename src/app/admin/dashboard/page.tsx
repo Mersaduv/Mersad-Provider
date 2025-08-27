@@ -25,7 +25,7 @@ export default function AdminDashboard() {
   if (status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+        <div className="text-xl">در حال بارگذاری...</div>
       </div>
     );
   }
@@ -41,22 +41,28 @@ export default function AdminDashboard() {
           <div className="border-4 border-dashed border-gray-200 rounded-lg h-96 p-8">
             <div className="text-center">
               <h1 className="text-3xl font-bold text-gray-900 mb-8">
-                Admin Dashboard
+                داشبورد ادمین
               </h1>
               <p className="text-lg text-gray-600 mb-8">
-                Welcome back, {session.user?.name || "Admin"}!
+                خوش آمدید، {session.user?.name || "ادمین"}!
               </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
                 <Link href="/admin/dashboard/categories">
                   <Button className="w-full h-24 text-lg bg-blue-600 hover:bg-blue-700">
-                    Manage Categories
+                    مدیریت دسته‌بندی‌ها
                   </Button>
                 </Link>
                 
                 <Link href="/admin/dashboard/attributes">
                   <Button className="w-full h-24 text-lg bg-green-600 hover:bg-green-700">
-                    Manage Attributes
+                    مدیریت ویژگی‌ها
+                  </Button>
+                </Link>
+
+                <Link href="/admin/dashboard/products">
+                  <Button className="w-full h-24 text-lg bg-purple-600 hover:bg-purple-700">
+                    مدیریت محصولات
                   </Button>
                 </Link>
               </div>
@@ -67,7 +73,7 @@ export default function AdminDashboard() {
                   variant="outline"
                   className="bg-white hover:bg-gray-50"
                 >
-                  Sign Out
+                  خروج
                 </Button>
               </div>
             </div>

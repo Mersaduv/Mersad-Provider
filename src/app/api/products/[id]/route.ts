@@ -4,12 +4,13 @@ import { NextRequest, NextResponse } from 'next/server'
 // GET /api/products/[id] - Get a product by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const product = await prisma.product.findUnique({
       where: {
-        id: params.id,
+        id,
       },
       include: {
         category: true,
@@ -36,21 +37,21 @@ export async function GET(
 // PUT /api/products/[id] - Update a product by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const json = await request.json()
     
     const product = await prisma.product.update({
       where: {
-        id: params.id,
+        id,
       },
       data: {
         name: json.name,
+        slug: json.slug,
         description: json.description,
-        price: json.price,
-        imageUrl: json.imageUrl,
-        inventory: json.inventory,
+        imageUrls: json.imageUrls || [],
         categoryId: json.categoryId,
       },
       include: {
@@ -71,12 +72,14 @@ export async function PUT(
 // DELETE /api/products/[id] - Delete a product by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+    
     await prisma.product.delete({
       where: {
-        id: params.id,
+        id,
       },
     })
     

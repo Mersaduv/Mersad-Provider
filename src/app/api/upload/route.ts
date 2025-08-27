@@ -7,6 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
+    const type = formData.get("type") as string || "products"; // Default to products
 
     if (!file) {
       return NextResponse.json(
@@ -39,20 +40,20 @@ export async function POST(request: NextRequest) {
       await mkdir(uploadsDir, { recursive: true });
     }
 
-    // Create categories subdirectory
-    const categoriesDir = join(uploadsDir, "categories");
-    if (!existsSync(categoriesDir)) {
-      await mkdir(categoriesDir, { recursive: true });
+    // Create type-specific subdirectory
+    const typeDir = join(uploadsDir, type);
+    if (!existsSync(typeDir)) {
+      await mkdir(typeDir, { recursive: true });
     }
 
     // Generate unique filename
     const timestamp = Date.now();
     const randomString = Math.random().toString(36).substring(2, 15);
     const fileExtension = file.name.split('.').pop();
-    const fileName = `category_${timestamp}_${randomString}.${fileExtension}`;
+    const fileName = `${type}_${timestamp}_${randomString}.${fileExtension}`;
     
     // Full path for saving
-    const filePath = join(categoriesDir, fileName);
+    const filePath = join(typeDir, fileName);
     
     // Convert file to buffer and save
     const bytes = await file.arrayBuffer();
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
     await writeFile(filePath, buffer);
 
     // Return the public URL path
-    const publicPath = `/uploads/categories/${fileName}`;
+    const publicPath = `/uploads/${type}/${fileName}`;
 
     return NextResponse.json({
       success: true,

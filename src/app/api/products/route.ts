@@ -28,11 +28,9 @@ export async function POST(request: NextRequest) {
     const product = await prisma.product.create({
       data: {
         name: json.name,
+        slug: json.slug,
         description: json.description,
-        price: json.price,
-        imageUrl: json.imageUrl,
-        inventory: json.inventory,
-        userId: json.userId,
+        imageUrls: json.imageUrls || [],
         categoryId: json.categoryId,
       },
       include: {

@@ -59,6 +59,42 @@ export default function Home() {
           </ol>
         </div>
       </div>
+
+      {/* Additional sections for testing sticky navigation */}
+      <div className="mt-16">
+        <h2 className="text-3xl font-bold text-center mb-8">ویژگی‌های پروژه</h2>
+        <div className="space-y-8">
+          {Array.from({ length: 10 }, (_, i) => (
+            <div key={i} className="bg-white border rounded-lg p-6 shadow-sm">
+              <h3 className="text-xl font-bold mb-3 text-blue-600">بخش {i + 1}</h3>
+              <p className="text-gray-600 leading-relaxed">
+                این بخش برای تست عملکرد navigation چسبان و انیمیشن‌های اسکرول اضافه شده است. 
+                وقتی اسکرول می‌کنید، navigation در بالای صفحه ثابت می‌ماند و بخش دوم به صورت انیمیشنی مخفی می‌شود.
+                همچنین دکمه "برگشت به بالا" در گوشه چپ پایین صفحه ظاهر می‌شود.
+              </p>
+              <div className="mt-4 p-4 bg-gray-50 rounded">
+                <p className="text-sm text-gray-500">
+                  این محتوای اضافی برای نمایش بهتر قابلیت‌های navigation است.
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-16 text-center">
+        <h2 className="text-2xl font-bold mb-4">نتیجه‌گیری</h2>
+        <p className="text-gray-600 max-w-2xl mx-auto">
+          با این پیاده‌سازی، navigation شما حالا دارای قابلیت‌های زیر است:
+        </p>
+        <ul className="mt-4 max-w-2xl mx-auto text-right space-y-2">
+          <li>✅ چسبان شدن به بالای صفحه هنگام اسکرول</li>
+          <li>✅ انیمیشن نرم برای مخفی کردن بخش دوم</li>
+          <li>✅ طراحی واکنش‌گرا برای موبایل و دسکتاپ</li>
+          <li>✅ دکمه برگشت به بالا</li>
+          <li>✅ انیمیشن‌های نرم و زیبا</li>
+        </ul>
+      </div>
     </div>
   );
 }
