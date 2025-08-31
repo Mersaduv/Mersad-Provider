@@ -20,7 +20,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
       slug: params.slug,
     },
     include: {
-      category: true,
+      category: {
+        include: {
+          attributes: true,
+        },
+      },
     },
   });
 
@@ -51,6 +55,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
   };
 
   const categoryHierarchy = await getCategoryHierarchy(product.categoryId);
+
+  // Transform the product data to match the expected interface
+  const transformedProduct = {
+    ...product,
+    createdAt: product.createdAt.toISOString(),
+    updatedAt: product.updatedAt.toISOString(),
+    category: {
+      id: product.category.id,
+      name: product.category.name,
+      attributes: product.category.attributes || [],
+    },
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -127,7 +143,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <ProductSiteItems />
 
         {/* Product Information Tabs */}
-        <ProductTabs product={product} />
+        <ProductTabs product={transformedProduct} />
       </div>
     </div>
   );

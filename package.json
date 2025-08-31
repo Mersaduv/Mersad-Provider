@@ -7,10 +7,12 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
+    "@ckeditor/ckeditor5-build-decoupled-document": "^41.4.2",
+    "@ckeditor/ckeditor5-react": "^11.0.0",
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^3.0.2",
     "clsx": "^2.1.1",
@@ -25,6 +27,7 @@
     "@eslint/eslintrc": "^3",
     "@prisma/client": "^6.14.0",
     "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

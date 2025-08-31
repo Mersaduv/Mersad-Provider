@@ -9,7 +9,7 @@ import Link from "next/link";
 interface Attribute {
   id: string;
   name: string;
-  value: string;
+  value: string; // Reverted back to single value
   categoryId: string;
   category: {
     id: string;
@@ -33,7 +33,7 @@ export default function AttributesManagement() {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    value: "",
+    value: "", // Reverted back to single value
     categoryId: ""
   });
   const [editingId, setEditingId] = useState<string | null>(null);

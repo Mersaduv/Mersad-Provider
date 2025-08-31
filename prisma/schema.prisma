@@ -12,23 +12,18 @@ model Category {
   name        String      @unique
   description String
   slug        String      @unique
-  image       String?     // Image path for category
-  level       Int         @default(0) // 0 = root, 1 = first level, etc.
-  order       Int         @default(0) // For sorting within same level
+  image       String?
+  level       Int         @default(0)
+  order       Int         @default(0)
   isActive    Boolean     @default(true)
-  
-  // Hierarchical relationships
-  parentId    String?     // Self-referencing foreign key
-  parent      Category?   @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  children    Category[]  @relation("CategoryHierarchy")
-  
+  parentId    String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-  
-  // Related models
-  products    Product[]
   attributes  Attribute[]
-  
+  parent      Category?   @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[]  @relation("CategoryHierarchy")
+  products    Product[]
+
   @@index([parentId])
   @@index([level])
   @@index([order])

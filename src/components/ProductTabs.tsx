@@ -14,6 +14,11 @@ interface Product {
   category: {
     id: string;
     name: string;
+    attributes: {
+      id: string;
+      name: string;
+      value: string; // Single value field
+    }[];
   };
   createdAt: string;
   updatedAt: string;
@@ -54,56 +59,34 @@ export function ProductTabs({ product }: ProductTabsProps) {
             <div className="bg-gray-50 rounded-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">مشخصات فنی محصول</h3>
               
-              <div className="space-y-3">
-                {/* Example specifications - you can make these dynamic based on your data */}
-                <div className="flex justify-between items-center py-3 px-4 bg-white rounded-lg">
-                  <span className="text-gray-600 font-medium">ولتاژ (Voltage):</span>
-                  <span className="text-gray-800 font-bold">3V</span>
+              {product.category.attributes && product.category.attributes.length > 0 ? (
+                <div className="space-y-3">
+                  {product.category.attributes.map((attribute, index) => (
+                    <div 
+                      key={attribute.id} 
+                      className={`flex justify-between items-center py-3 px-4 rounded-lg ${
+                        index % 2 === 0 ? 'bg-white' : 'bg-gray-100'
+                      }`}
+                    >
+                      <span className="text-gray-600 font-medium">{attribute.name}:</span>
+                      <span className="text-gray-800 font-bold">{attribute.value}</span>
+                    </div>
+                  ))}
                 </div>
-                
-                <div className="flex justify-between items-center py-3 px-4 bg-gray-100 rounded-lg">
-                  <span className="text-gray-600 font-medium">توان (Power):</span>
-                  <span className="text-gray-800 font-bold">0.2W</span>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <p>مشخصات فنی برای این محصول تعریف نشده است</p>
                 </div>
-                
-                <div className="flex justify-between items-center py-3 px-4 bg-white rounded-lg">
-                  <span className="text-gray-600 font-medium">شدت نور (Luminous Intensity):</span>
-                  <span className="text-gray-800 font-bold">lm (28-30) (26-28)</span>
-                </div>
-                
-                <div className="flex justify-between items-center py-3 px-4 bg-gray-100 rounded-lg">
-                  <span className="text-gray-600 font-medium">رنگ (Color):</span>
-                  <span className="text-gray-800 font-bold">k (3000-6500)</span>
-                </div>
-                
-                <div className="flex justify-between items-center py-3 px-4 bg-white rounded-lg">
-                  <span className="text-gray-600 font-medium">RA:</span>
-                  <span className="text-gray-800 font-bold">80</span>
-                </div>
-                
-                <div className="flex justify-between items-center py-3 px-4 bg-gray-100 rounded-lg">
-                  <span className="text-gray-600 font-medium">SDCM:</span>
-                  <span className="text-gray-800 font-bold">5</span>
-                </div>
-                
-                <div className="flex justify-between items-center py-3 px-4 bg-white rounded-lg">
-                  <span className="text-gray-600 font-medium">جنس پایه یا پد LED چیست:</span>
-                  <span className="text-gray-800 font-bold">مس (Copper)</span>
-                </div>
-                
-                <div className="flex justify-between items-center py-3 px-4 bg-gray-100 rounded-lg">
-                  <span className="text-gray-600 font-medium">پایه مساوی یا نامساوی:</span>
-                  <span className="text-gray-800 font-bold">نامساوی (Unequal)</span>
-                </div>
-              </div>
+              )}
             </div>
 
             {/* Product Description */}
             <div className="bg-white rounded-lg p-6 border border-gray-200">
               <h3 className="text-xl font-bold text-gray-800 mb-4">توضیحات محصول</h3>
-              <div className="text-gray-700 leading-relaxed whitespace-pre-line">
-                {product.description}
-              </div>
+              <div 
+                className="text-gray-700 leading-relaxed prose prose-lg max-w-none ck-content"
+                dangerouslySetInnerHTML={{ __html: product.description }}
+              />
             </div>
           </div>
         );

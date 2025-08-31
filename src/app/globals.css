@@ -79,3 +79,800 @@ html {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Custom CKEditor Styles */
+.ckeditor-container {
+  direction: rtl;
+}
+
+/* Toolbar Container */
+.ck-toolbar-container {
+  border: 1px solid #d1d5db;
+  border-bottom: none;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background: white;
+}
+
+.ck-toolbar-container .ck-toolbar {
+  border: none !important;
+  border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+/* Font Size Classes for CKEditor */
+/* CKEditor Generated Font Size Classes - Applied globally for content display */
+.text-tiny {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+
+.text-small {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.text-default {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+}
+
+.text-big {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
+}
+
+.text-huge {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+
+/* Additional font size classes that might be generated */
+.text-xs {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+
+.text-sm {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.text-base {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+}
+
+.text-lg {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
+}
+
+.text-xl {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+
+.text-2xl {
+  font-size: 1.5rem !important;
+  line-height: 2rem !important;
+}
+
+.text-3xl {
+  font-size: 1.875rem !important;
+  line-height: 2.25rem !important;
+}
+
+.text-4xl {
+  font-size: 2.25rem !important;
+  line-height: 2.5rem !important;
+}
+
+/* Legacy Font Size Classes for CKEditor */
+.ckeditor-container .text-xs {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+
+.ckeditor-container .text-sm {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.ckeditor-container .text-base {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+}
+
+.ckeditor-container .text-lg {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
+}
+
+.ckeditor-container .text-xl {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+
+.ckeditor-container .text-2xl {
+  font-size: 1.5rem !important;
+  line-height: 2rem !important;
+}
+
+.ckeditor-container .ck-editor__editable {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.ckeditor-container .ck-editor__editable p {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.ckeditor-container .ck-editor__editable h1,
+.ckeditor-container .ck-editor__editable h2,
+.ckeditor-container .ck-editor__editable h3,
+.ckeditor-container .ck-editor__editable h4,
+.ckeditor-container .ck-editor__editable h5,
+.ckeditor-container .ck-editor__editable h6 {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.ckeditor-container .ck-editor__editable ul,
+.ckeditor-container .ck-editor__editable ol {
+  padding-right: 1.5em !important;
+  padding-left: 0 !important;
+}
+
+.ckeditor-container .ck-editor__editable li {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.ckeditor-container .ck-editor__editable blockquote {
+  border-right: 4px solid #e5e7eb !important;
+  border-left: none !important;
+  padding-right: 1rem !important;
+  padding-left: 0 !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+.ckeditor-container .ck-editor__editable table {
+  direction: rtl !important;
+}
+
+.ckeditor-container .ck-editor__editable th,
+.ckeditor-container .ck-editor__editable td {
+  text-align: right !important;
+}
+
+/* RTL Support for CKEditor Toolbar */
+.ckeditor-container .ck-toolbar {
+  direction: rtl !important;
+}
+
+.ckeditor-container .ck-toolbar__items {
+  flex-direction: row-reverse !important;
+}
+
+.ckeditor-container .ck-toolbar__grouped-dropdown {
+  direction: rtl !important;
+}
+
+/* Custom focus styles */
+.ckeditor-container .ck-editor__editable.ck-focused {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Font Family Classes for CKEditor */
+.font-default {
+  font-family: inherit !important;
+}
+
+.font-arial {
+  font-family: 'Arial, Helvetica, sans-serif' !important;
+}
+
+.font-courier {
+  font-family: 'Courier New, Courier, monospace' !important;
+}
+
+.font-georgia {
+  font-family: 'Georgia, serif' !important;
+}
+
+.font-lucida {
+  font-family: 'Lucida Sans Unicode, Lucida Grande, sans-serif' !important;
+}
+
+.font-tahoma {
+  font-family: 'Tahoma, Geneva, sans-serif' !important;
+}
+
+.font-times {
+  font-family: 'Times New Roman, Times, serif' !important;
+}
+
+.font-trebuchet {
+  font-family: 'Trebuchet MS, Helvetica, sans-serif' !important;
+}
+
+.font-verdana {
+  font-family: 'Verdana, Geneva, sans-serif' !important;
+}
+
+.font-b-nazanin {
+  font-family: 'B Nazanin' !important;
+}
+
+.font-b-titr {
+  font-family: 'B Titr' !important;
+}
+
+.font-b-yekan {
+  font-family: 'B Yekan' !important;
+}
+
+.font-b-zar {
+  font-family: 'B Zar' !important;
+}
+
+.font-bardiya {
+  font-family: 'Bardiya' !important;
+}
+
+.font-ferdosi {
+  font-family: 'Ferdosi' !important;
+}
+
+.font-homa {
+  font-family: 'Homa' !important;
+}
+
+.font-koodak {
+  font-family: 'Koodak' !important;
+}
+
+.font-lotus {
+  font-family: 'Lotus' !important;
+}
+
+.font-mitra {
+  font-family: 'Mitra' !important;
+}
+
+.font-narm {
+  font-family: 'Narm' !important;
+}
+
+.font-nazanin {
+  font-family: 'Nazanin' !important;
+}
+
+.font-tahoma {
+  font-family: 'Tahoma' !important;
+}
+
+.font-titr {
+  font-family: 'Titr' !important;
+}
+
+.font-traffic {
+  font-family: 'Traffic' !important;
+}
+
+.font-yekan {
+  font-family: 'Yekan' !important;
+}
+
+.font-zar {
+  font-family: 'Zar' !important;
+}
+
+/* Content Display Styles - For rendered CKEditor content */
+.ck-content {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.ck-content p {
+  direction: rtl !important;
+  text-align: right !important;
+  /* margin-bottom: 1rem !important; */
+}
+
+.ck-content h1,
+.ck-content h2,
+.ck-content h3,
+.ck-content h4,
+.ck-content h5,
+.ck-content h6 {
+  direction: rtl !important;
+  text-align: right !important;
+  /* margin-top: 1.5rem !important; */
+  /* margin-bottom: 1rem !important; */
+  font-weight: bold !important;
+}
+
+.ck-content ul,
+.ck-content ol {
+  padding-right: 1.5rem !important;
+  padding-left: 0 !important;
+  /* margin-bottom: 1rem !important; */
+}
+
+.ck-content li {
+  direction: rtl !important;
+  text-align: right !important;
+  /* margin-bottom: 0.5rem !important; */
+}
+
+.ck-content blockquote {
+  border-right: 4px solid #e5e7eb !important;
+  border-left: none !important;
+  padding-right: 1rem !important;
+  padding-left: 0 !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  margin-bottom: 1rem !important;
+  font-style: italic !important;
+}
+
+.ck-content table {
+  direction: rtl !important;
+  width: 100% !important;
+  margin-bottom: 1rem !important;
+}
+
+.ck-content th,
+.ck-content td {
+  text-align: right !important;
+  padding: 0.5rem !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.ck-content th {
+  background-color: #f9fafb !important;
+  font-weight: bold !important;
+}
+
+/* Additional CKEditor specific styles */
+.ck-content [style*="font-size"] {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.ck-content [style*="font-family"] {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.ck-content [style*="color"] {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.ck-content [style*="background-color"] {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+/* Handle inline font-size styles - CKEditor generates inline styles */
+.ck-content [style*="font-size: 0.75rem"],
+.ck-content [style*="font-size: 12px"],
+.ck-content [style*="font-size: 12.8px"] {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+
+.ck-content [style*="font-size: 0.875rem"],
+.ck-content [style*="font-size: 14px"],
+.ck-content [style*="font-size: 14.4px"] {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.ck-content [style*="font-size: 1rem"],
+.ck-content [style*="font-size: 16px"],
+.ck-content [style*="font-size: 16.8px"] {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+}
+
+.ck-content [style*="font-size: 1.125rem"],
+.ck-content [style*="font-size: 18px"],
+.ck-content [style*="font-size: 19.2px"] {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
+}
+
+.ck-content [style*="font-size: 1.25rem"],
+.ck-content [style*="font-size: 20px"],
+.ck-content [style*="font-size: 22.4px"] {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+
+/* Additional font size handling for common CKEditor values */
+.ck-content [style*="font-size: 10px"] {
+  font-size: 0.625rem !important;
+  line-height: 1rem !important;
+}
+
+.ck-content [style*="font-size: 11px"] {
+  font-size: 0.6875rem !important;
+  line-height: 1rem !important;
+}
+
+.ck-content [style*="font-size: 13px"] {
+  font-size: 0.8125rem !important;
+  line-height: 1.25rem !important;
+}
+
+.ck-content [style*="font-size: 15px"] {
+  font-size: 0.9375rem !important;
+  line-height: 1.5rem !important;
+}
+
+.ck-content [style*="font-size: 17px"] {
+  font-size: 1.0625rem !important;
+  line-height: 1.5rem !important;
+}
+
+.ck-content [style*="font-size: 19px"] {
+  font-size: 1.1875rem !important;
+  line-height: 1.75rem !important;
+}
+
+.ck-content [style*="font-size: 21px"] {
+  font-size: 1.3125rem !important;
+  line-height: 1.75rem !important;
+}
+
+.ck-content [style*="font-size: 24px"] {
+  font-size: 1.5rem !important;
+  line-height: 2rem !important;
+}
+
+/* Additional font size handling for CKEditor */
+.ck-content span[class*="text-"] {
+  display: inline !important;
+}
+
+.ck-content p[class*="text-"] {
+  display: block !important;
+}
+
+/* Force font size inheritance */
+.ck-content * {
+  font-size: inherit;
+}
+
+.ck-content .text-tiny {
+  font-size: 0.75rem !important;
+}
+
+.ck-content .text-small {
+  font-size: 0.875rem !important;
+}
+
+.ck-content .text-default {
+  font-size: 1rem !important;
+}
+
+.ck-content .text-big {
+  font-size: 1.125rem !important;
+}
+
+.ck-content .text-huge {
+  font-size: 1.25rem !important;
+}
+
+/* Handle CKEditor inline font-size styles more comprehensively */
+.ck-content [style*="font-size"] {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+/* Specific font-size values that CKEditor commonly generates */
+.ck-content [style*="font-size: 10px"] {
+  font-size: 0.625rem !important;
+  line-height: 1rem !important;
+}
+
+.ck-content [style*="font-size: 11px"] {
+  font-size: 0.6875rem !important;
+  line-height: 1rem !important;
+}
+
+.ck-content [style*="font-size: 12px"] {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+
+.ck-content [style*="font-size: 13px"] {
+  font-size: 0.8125rem !important;
+  line-height: 1.25rem !important;
+}
+
+.ck-content [style*="font-size: 14px"] {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.ck-content [style*="font-size: 15px"] {
+  font-size: 0.9375rem !important;
+  line-height: 1.5rem !important;
+}
+
+.ck-content [style*="font-size: 16px"] {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+}
+
+.ck-content [style*="font-size: 17px"] {
+  font-size: 1.0625rem !important;
+  line-height: 1.5rem !important;
+}
+
+.ck-content [style*="font-size: 18px"] {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
+}
+
+.ck-content [style*="font-size: 19px"] {
+  font-size: 1.1875rem !important;
+  line-height: 1.75rem !important;
+}
+
+.ck-content [style*="font-size: 20px"] {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+
+.ck-content [style*="font-size: 21px"] {
+  font-size: 1.3125rem !important;
+  line-height: 1.75rem !important;
+}
+
+.ck-content [style*="font-size: 22px"] {
+  font-size: 1.375rem !important;
+  line-height: 1.75rem !important;
+}
+
+.ck-content [style*="font-size: 24px"] {
+  font-size: 1.5rem !important;
+  line-height: 2rem !important;
+}
+
+.ck-content [style*="font-size: 26px"] {
+  font-size: 1.625rem !important;
+  line-height: 2rem !important;
+}
+
+.ck-content [style*="font-size: 28px"] {
+  font-size: 1.75rem !important;
+  line-height: 2rem !important;
+}
+
+.ck-content [style*="font-size: 30px"] {
+  font-size: 1.875rem !important;
+  line-height: 2.25rem !important;
+}
+
+.ck-content [style*="font-size: 32px"] {
+  font-size: 2rem !important;
+  line-height: 2.5rem !important;
+}
+
+.ck-content [style*="font-size: 36px"] {
+  font-size: 2.25rem !important;
+  line-height: 2.5rem !important;
+}
+
+.ck-content [style*="font-size: 40px"] {
+  font-size: 2.5rem !important;
+  line-height: 3rem !important;
+}
+
+.ck-content [style*="font-size: 48px"] {
+  font-size: 3rem !important;
+  line-height: 3.5rem !important;
+}
+
+/* Additional debugging and fallback styles */
+.ck-content [class*="text-"] {
+  font-size: inherit !important;
+}
+
+.ck-content [class*="text-tiny"] {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+
+.ck-content [class*="text-small"] {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.ck-content [class*="text-default"] {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+}
+
+.ck-content [class*="text-big"] {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
+}
+
+.ck-content [class*="text-huge"] {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+
+/* Ensure font size classes work in all contexts */
+.text-tiny,
+.ck-content .text-tiny,
+.prose .text-tiny,
+div .text-tiny,
+p .text-tiny,
+span .text-tiny,
+* .text-tiny {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+
+.text-small,
+.ck-content .text-small,
+.prose .text-small,
+div .text-small,
+p .text-small,
+span .text-small,
+* .text-small {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.text-default,
+.ck-content .text-default,
+.prose .text-default,
+div .text-default,
+p .text-default,
+span .text-default,
+* .text-default {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+}
+
+.text-big,
+.ck-content .text-big,
+.prose .text-big,
+div .text-big,
+p .text-big,
+span .text-big,
+* .text-big {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
+}
+
+.text-huge,
+.ck-content .text-huge,
+.prose .text-huge,
+div .text-huge,
+p .text-huge,
+span .text-huge,
+* .text-huge {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+
+.prose {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.prose p {
+  direction: rtl !important;
+  text-align: right !important;
+  margin-bottom: 1rem !important;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  direction: rtl !important;
+  text-align: right !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  font-weight: bold !important;
+}
+
+.prose ul,
+.prose ol {
+  padding-right: 1.5rem !important;
+  padding-left: 0 !important;
+  margin-bottom: 1rem !important;
+}
+
+.prose li {
+  direction: rtl !important;
+  text-align: right !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.prose blockquote {
+  border-right: 4px solid #e5e7eb !important;
+  border-left: none !important;
+  padding-right: 1rem !important;
+  padding-left: 0 !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  margin-bottom: 1rem !important;
+  font-style: italic !important;
+}
+
+.prose table {
+  direction: rtl !important;
+  width: 100% !important;
+  margin-bottom: 1rem !important;
+}
+
+.prose th,
+.prose td {
+  text-align: right !important;
+  padding: 0.5rem !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.prose th {
+  background-color: #f9fafb !important;
+  font-weight: bold !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .ckeditor-container .ck-toolbar__items {
+    flex-wrap: wrap !important;
+  }
+  
+  .ckeditor-container .ck-editor__editable {
+    min-height: 150px !important;
+    max-height: 300px !important;
+  }
+}
+
+/* Color Picker Styles */
+.ckeditor-container .ck-color-grid__tile {
+  border-radius: 0.25rem !important;
+  border: 2px solid transparent !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.ckeditor-container .ck-color-grid__tile:hover {
+  border-color: #3b82f6 !important;
+  transform: scale(1.1) !important;
+}
+
+.ckeditor-container .ck-color-grid__tile.ck-color-grid__tile_selected {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+}
+
+.ckeditor-container .ck-color-table {
+  border-radius: 0.5rem !important;
+  overflow: hidden !important;
+}
+
+.ckeditor-container .ck-color-table__remove-color {
+  background-color: #ef4444 !important;
+  color: white !important;
+  border-radius: 0.25rem !important;
+}
+
+.ckeditor-container .ck-color-table__remove-color:hover {
+  background-color: #dc2626 !important;
+}

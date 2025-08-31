@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { generateSlug } from "@/lib/utils";
+import dynamic from "next/dynamic";
 
 interface Product {
   id: string;
@@ -29,7 +30,10 @@ interface Category {
   slug: string;
   level: number;
 }
-
+const CustomCKEditor = dynamic(
+  () => import("@/components/CKEditor"),
+  { ssr: false } 
+);
 export default function ProductsManagement() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -284,9 +288,14 @@ function ProductForm({
 
       if (response.ok) {
         onSuccess();
+      } else {
+        // Handle error response
+        const errorData = await response.json();
+        alert(`خطا در ذخیره محصول: ${errorData.error || 'خطای نامشخص'}`);
       }
     } catch (error) {
       console.error("Error saving product:", error);
+      alert("خطا در ارتباط با سرور");
     } finally {
       setLoading(false);
     }
@@ -400,12 +409,11 @@ function ProductForm({
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 توضیحات *
               </label>
-              <textarea
-                required
-                rows={4}
+              <CustomCKEditor
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={(data) => setFormData({ ...formData, description: data })}
+                placeholder="توضیحات کامل محصول را وارد کنید..."
+                className="w-full"
               />
             </div>
 

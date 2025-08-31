@@ -8,11 +8,21 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, value, categoryId } = body;
+    const { name, values, categoryId } = body;
 
-    if (!name || !value || !categoryId) {
+    if (!name || !values || !categoryId || !Array.isArray(values) || values.length === 0) {
       return NextResponse.json(
-        { error: "Name, value, and categoryId are required" },
+        { error: "Name, values array, and categoryId are required" },
+        { status: 400 }
+      );
+    }
+
+    // Filter out empty values
+    const filteredValues = values.filter(v => v && v.trim());
+
+    if (filteredValues.length === 0) {
+      return NextResponse.json(
+        { error: "At least one non-empty value is required" },
         { status: 400 }
       );
     }
@@ -33,7 +43,7 @@ export async function PUT(
       where: { id },
       data: {
         name,
-        value,
+        values: filteredValues,
         categoryId,
       },
       include: {
