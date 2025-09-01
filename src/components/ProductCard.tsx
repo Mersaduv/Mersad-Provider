@@ -37,7 +37,7 @@ export function ProductCard({
           </div>
         )}
         <div className="absolute top-2 right-2">
-          <span className="inline-block bg-purple-100 text-purple-800 rounded-full px-2 py-1 text-xs font-medium">
+          <span className="inline-block bg-indigo-100 text-indigo-800 rounded-full px-2 py-1 text-xs font-medium">
             {categoryName}
           </span>
         </div>

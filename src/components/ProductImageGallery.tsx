@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
-import { ZoomIn, X } from "lucide-react";
+import { ZoomIn, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { ImageTest } from "./ImageTest";
 
 interface ProductImageGalleryProps {
@@ -29,6 +30,38 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
     console.log('ProductImageGallery - selectedImage:', selectedImage);
     console.log('ProductImageGallery - mainImage:', imageUrls[selectedImage]);
   }, [imageUrls, selectedImage]);
+
+  // Keyboard navigation for full-screen mode
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isZoomed) return;
+      
+      switch (e.key) {
+        case 'Escape':
+          setIsZoomed(false);
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          setSelectedImage(prev => prev > 0 ? prev - 1 : imageUrls.length - 1);
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          setSelectedImage(prev => prev < imageUrls.length - 1 ? prev + 1 : 0);
+          break;
+      }
+    };
+
+    if (isZoomed) {
+      document.addEventListener('keydown', handleKeyDown);
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isZoomed, imageUrls.length]);
 
   if (!imageUrls || imageUrls.length === 0) {
     return (
@@ -79,6 +112,14 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
 
   const handleMouseLeave = () => {
     setShowZoom(false);
+  };
+
+  const handlePreviousImage = () => {
+    setSelectedImage(prev => prev > 0 ? prev - 1 : imageUrls.length - 1);
+  };
+
+  const handleNextImage = () => {
+    setSelectedImage(prev => prev < imageUrls.length - 1 ? prev + 1 : 0);
   };
 
   if (imageError) {
@@ -196,7 +237,7 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
         <img
           src={mainImage}
           alt={`${productName} - تصویر بزرگ ${selectedImage + 1}`}
-          className="w-full h-auto max-h-[80vh] object-contain"
+          className="w-full h-auto max-h-[90vh] object-contain"
           onError={handleImageError}
         />
       );
@@ -206,9 +247,9 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
       <Image
         src={mainImage}
         alt={`${productName} - تصویر بزرگ ${selectedImage + 1}`}
-        width={800}
-        height={600}
-        className="w-full h-auto max-h-[80vh] object-contain"
+        width={1200}
+        height={900}
+        className="w-full h-auto max-h-[90vh] object-contain"
         priority
         unoptimized={mainImage.startsWith('/uploads/')}
         onError={handleImageError}
@@ -278,40 +319,93 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
         </div>
       )}
 
-      {/* Full Screen Zoom Modal */}
-      {isZoomed && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
-          <div className="relative max-w-4xl max-h-full">
-            <button
-              onClick={() => setIsZoomed(false)}
-              className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 hover:bg-gray-100 transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            
-            <div className="relative w-full h-full">
-              {renderZoomImage()}
-            </div>
+             {/* Full Screen Zoom Modal - با z-index بالا برای پوشش کامل صفحه */}
+       {isZoomed && typeof window !== "undefined" && createPortal(
+         <div 
+           className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center p-4"
+           style={{ zIndex: 999999 }}
+         >
+           <div className="relative w-full h-full flex items-center justify-center">
+             {/* Close Button */}
+             <button
+               onClick={() => setIsZoomed(false)}
+               className="absolute top-6 right-6 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-3 transition-all duration-200 backdrop-blur-sm"
+               style={{ zIndex: 1000000 }}
+               aria-label="بستن"
+             >
+               <X className="w-6 h-6 text-black" />
+             </button>
 
-            {/* Navigation in zoom mode */}
-            {imageUrls.length > 1 && (
-              <div className="absolute inset-x-0 bottom-4 flex justify-center gap-2">
-                {imageUrls.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                      selectedImage === index
-                        ? "bg-white"
-                        : "bg-white bg-opacity-50 hover:bg-opacity-75"
-                    }`}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+             {/* Previous Button */}
+             {imageUrls.length > 1 && (
+               <button
+                 onClick={handlePreviousImage}
+                 className="absolute left-6 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-3 transition-all duration-200 backdrop-blur-sm"
+                 style={{ zIndex: 1000000 }}
+                 aria-label="تصویر قبلی"
+               >
+                 <ChevronLeft className="w-6 h-6 text-black" />
+               </button>
+             )}
+
+             {/* Next Button */}
+             {imageUrls.length > 1 && (
+               <button
+                 onClick={handleNextImage}
+                 className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-3 transition-all duration-200 backdrop-blur-sm"
+                 style={{ zIndex: 1000000 }}
+                 aria-label="تصویر بعدی"
+               >
+                 <ChevronRight className="w-6 h-6 text-black" />
+               </button>
+             )}
+             
+             {/* Main Image */}
+             <div className="relative w-full h-full flex items-center justify-center">
+               {renderZoomImage()}
+             </div>
+
+             {/* Image Counter */}
+             <div 
+               className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-4 py-2 rounded-full backdrop-blur-sm"
+               style={{ zIndex: 1000000 }}
+             >
+               {selectedImage + 1} / {imageUrls.length}
+             </div>
+
+             {/* Navigation Dots */}
+             {imageUrls.length > 1 && (
+               <div 
+                 className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex justify-center gap-2"
+                 style={{ zIndex: 1000000 }}
+               >
+                 {imageUrls.map((_, index) => (
+                   <button
+                     key={index}
+                     onClick={() => setSelectedImage(index)}
+                     className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                       selectedImage === index
+                         ? "bg-white"
+                         : "bg-white bg-opacity-50 hover:bg-opacity-75"
+                     }`}
+                     aria-label={`تصویر ${index + 1}`}
+                   />
+                 ))}
+               </div>
+             )}
+
+             {/* Keyboard Navigation Hint */}
+             <div 
+               className="absolute top-6 left-6 text-white text-sm bg-black bg-opacity-50 px-3 py-2 rounded-lg backdrop-blur-sm"
+               style={{ zIndex: 1000000 }}
+             >
+               <div>برای حرکت: ← →</div>
+               <div>برای بستن: ESC</div>
+             </div>
+           </div>
+         </div>,
+         document.body
+       )}
     </div>
   );
 }

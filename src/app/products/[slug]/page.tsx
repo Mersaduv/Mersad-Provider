@@ -116,7 +116,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           {/* Background decorative elements */}
           <div className="absolute inset-0 opacity-5">
             <div className="absolute top-10 left-10 w-32 h-32 bg-yellow-400 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-10 right-10 w-24 h-24 bg-purple-400 rounded-full blur-2xl"></div>
+            <div className="absolute bottom-10 right-10 w-24 h-24 bg-indigo-400 rounded-full blur-2xl"></div>
           </div>
 
           <div className="relative z-10 flex flex-col lg:flex-row gap-8">

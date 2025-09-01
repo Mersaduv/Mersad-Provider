@@ -49,7 +49,7 @@ export function ProductSiteItems() {
               </div>
             </div>
             
-            <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-purple-600 transition-colors duration-300">
+            <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors duration-300">
               {feature.title}
             </h3>
             
