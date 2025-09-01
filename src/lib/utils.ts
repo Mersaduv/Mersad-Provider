@@ -58,3 +58,4 @@ export function generateSlug(text: string): string {
     // Limit length
     .substring(0, 60);
 }
+export const phoneNumber = "+93702185538";

@@ -20,7 +20,7 @@ export default async function ProductsPage() {
       <div className="bg-purple-900 text-white py-3">
         <div className="container mx-auto px-4">
           <nav className="text-sm">
-            <ol className="flex items-center space-x-2 space-x-reverse">
+            <ol className="flex items-center space-x-2 ">
               <li>
                 <Link href="/" className="hover:text-yellow-300 transition-colors">خانه</Link>
               </li>

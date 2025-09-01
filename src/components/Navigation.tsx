@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { phoneNumber } from "@/lib/utils";
 
 // Custom hook to track navigation height changes
 function useNavigationHeight() {
@@ -45,7 +46,6 @@ function useNavigationHeight() {
 }
 
 export function Navigation() {
-  const phoneNumber = "+93702185538";
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSecondSectionVisible, setIsSecondSectionVisible] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -74,12 +74,10 @@ export function Navigation() {
   const handlePhoneClick = (e: React.MouseEvent) => {
     e.preventDefault();
 
-    // کپی شماره
     navigator.clipboard.writeText(phoneNumber).then(() => {
       console.log("شماره کپی شد:", phoneNumber);
     });
 
-    // باز کردن شماره‌گیر
     window.location.href = `tel:${phoneNumber}`;
   };
 

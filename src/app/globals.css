@@ -775,7 +775,7 @@ span .text-huge,
 .prose p {
   direction: rtl !important;
   text-align: right !important;
-  margin-bottom: 1rem !important;
+  margin-bottom: 0rem !important;
 }
 
 .prose h1,

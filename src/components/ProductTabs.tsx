@@ -68,7 +68,7 @@ export function ProductTabs({ product }: ProductTabsProps) {
                         index % 2 === 0 ? 'bg-white' : 'bg-gray-100'
                       }`}
                     >
-                      <span className="text-gray-600 font-medium">{attribute.name}:</span>
+                      <span className="text-gray-600 font-medium">{attribute.name}</span>
                       <span className="text-gray-800 font-bold">{attribute.value}</span>
                     </div>
                   ))}
@@ -110,21 +110,21 @@ export function ProductTabs({ product }: ProductTabsProps) {
                   <span className="text-blue-600 ml-2">🚚</span>
                   <div>
                     <p className="font-medium">ارسال به سراسر کشور</p>
-                    <p className="text-sm opacity-80">ارسال از طریق پست و تیپاکس</p>
+                    <p className="text-sm opacity-80">ارسال از طریق پست و سرویس های انتقال دهنده سراسر افغانستان</p>
                   </div>
                 </div>
                 <div className="flex items-start">
                   <span className="text-blue-600 ml-2">⏰</span>
                   <div>
                     <p className="font-medium">زمان تحویل</p>
-                    <p className="text-sm opacity-80">2-5 روز کاری</p>
+                    <p className="text-sm opacity-80">بسیار سریع</p>
                   </div>
                 </div>
                 <div className="flex items-start">
                   <span className="text-blue-600 ml-2">💰</span>
                   <div>
                     <p className="font-medium">هزینه ارسال</p>
-                    <p className="text-sm opacity-80">رایگان برای سفارشات بالای 500 هزار تومان</p>
+                    <p className="text-sm opacity-80">بسته به منطقه شما</p>
                   </div>
                 </div>
               </div>
