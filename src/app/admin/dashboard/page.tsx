@@ -47,7 +47,7 @@ export default function AdminDashboard() {
                 خوش آمدید، {session.user?.name || "ادمین"}!
               </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
                 <Link href="/admin/dashboard/categories">
                   <Button className="w-full h-24 text-lg bg-blue-600 hover:bg-blue-700">
                     مدیریت دسته‌بندی‌ها
@@ -63,6 +63,12 @@ export default function AdminDashboard() {
                 <Link href="/admin/dashboard/products">
                   <Button className="w-full h-24 text-lg bg-purple-600 hover:bg-purple-700">
                     مدیریت محصولات
+                  </Button>
+                </Link>
+
+                <Link href="/admin/dashboard/sliders">
+                  <Button className="w-full h-24 text-lg bg-orange-600 hover:bg-orange-700">
+                    مدیریت اسلایدر
                   </Button>
                 </Link>
               </div>

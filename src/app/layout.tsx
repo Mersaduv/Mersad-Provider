@@ -13,8 +13,48 @@ const vazirmatn = Vazirmatn({
 });
 
 export const metadata: Metadata = {
-  title: "سامانه ارائه دهنده",
-  description: "سایت ساخته شده با Next.js و Prisma",
+  title: {
+    default: "شرکت بازرگانی مرصاد",
+    template: "%s | شرکت بازرگانی مرصاد",
+  },
+  description: "سایت ساخته شده با Next.js و Prisma - شرکت بازرگانی مرصاد محصولات و خدمات",
+  keywords: ["Next.js", "Prisma", "فارسی", "محصولات", "فروشگاه"],
+  authors: [{ name: "شرکت بازرگانی مرصاد" }],
+  creator: "شرکت بازرگانی مرصاد",
+  publisher: "شرکت بازرگانی مرصاد",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"),
+  openGraph: {
+    type: "website",
+    locale: "fa_IR",
+    url: "/",
+    siteName: "شرکت بازرگانی مرصاد",
+    title: "شرکت بازرگانی مرصاد",
+    description: "سایت ساخته شده با Next.js و Prisma - شرکت بازرگانی مرصاد محصولات و خدمات",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "شرکت بازرگانی مرصاد",
+    description: "سایت ساخته شده با Next.js و Prisma - شرکت بازرگانی مرصاد محصولات و خدمات",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    google: process.env.GOOGLE_VERIFICATION,
+  },
 };
 
 export default function RootLayout({

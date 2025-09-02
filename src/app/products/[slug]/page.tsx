@@ -3,10 +3,61 @@ import { notFound } from "next/navigation";
 import { ProductImageGallery } from "@/components/ProductImageGallery";
 import { ProductSiteItems } from "@/components/ProductSiteItems";
 import { ProductTabs } from "@/components/ProductTabs";
-import { phoneNumber } from "@/lib/utils";
+
 import PhoneButton from "@/components/PhoneButton";
+import { Metadata } from "next";
+import Link from "next/link";
 
 export const revalidate = 3600; // Revalidate every hour
+
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const product = await prisma.product.findUnique({
+    where: {
+      slug: params.slug,
+    },
+    include: {
+      category: true,
+    },
+  });
+
+  if (!product) {
+    return {
+      title: "محصول یافت نشد - سامانه ارائه دهنده",
+      description: "محصول مورد نظر یافت نشد",
+    };
+  }
+
+  const title = `${product.name} - ${product.category.name} - سامانه ارائه دهنده`;
+  const description = product.description 
+    ? `${product.description.substring(0, 160)}...` 
+    : `مشاهده جزئیات محصول ${product.name} در دسته بندی ${product.category.name}`;
+
+  return {
+    title,
+    description,
+    keywords: [product.name, product.category.name, "محصول", "خرید", "فروشگاه"],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      locale: "fa_IR",
+      images: product.imageUrls && product.imageUrls.length > 0 ? [
+        {
+          url: product.imageUrls[0],
+          width: 800,
+          height: 600,
+          alt: product.name,
+        }
+      ] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: product.imageUrls && product.imageUrls.length > 0 ? [product.imageUrls[0]] : [],
+    },
+  };
+}
 
 interface ProductPageProps {
   params: {
@@ -48,21 +99,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
     while (currentCategory.parent) {
       hierarchy.unshift(currentCategory.parent.name);
-      currentCategory = currentCategory.parent;
+      // Get the parent category with its parent included
+      const parentCategory = await prisma.category.findUnique({
+        where: { id: currentCategory.parent.id },
+        include: { parent: true },
+      });
+      if (parentCategory) {
+        currentCategory = parentCategory;
+      } else {
+        break;
+      }
     }
 
     return hierarchy;
   };
 
-  const handlePhoneClick = (e: React.MouseEvent) => {
-    e.preventDefault();
 
-    navigator.clipboard.writeText(phoneNumber).then(() => {
-      console.log("شماره کپی شد:", phoneNumber);
-    });
-
-    window.location.href = `tel:${phoneNumber}`;
-  };
 
   const categoryHierarchy = await getCategoryHierarchy(product.categoryId);
 
@@ -86,9 +138,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <nav className="text-sm">
             <ol className="flex items-center space-x-2 space-x-reverse">
               <li>
-                <a href="/" className="hover:text-yellow-300 transition-colors">
+                <Link href="/" className="hover:text-yellow-300 transition-colors">
                   خانه
-                </a>
+                </Link>
               </li>
               {categoryHierarchy.map((categoryName, index) => (
                 <li key={index} className="flex items-center">

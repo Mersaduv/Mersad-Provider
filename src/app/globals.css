@@ -5,6 +5,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-vazirmatn: var(--font-vazirmatn);
+  --breakpoint-mdx: 840px;
 }
 
 body {

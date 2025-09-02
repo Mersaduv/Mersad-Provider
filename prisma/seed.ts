@@ -197,12 +197,52 @@ async function main() {
     },
   })
 
-  console.log('Hierarchical categories created successfully!')
+  // Create sample sliders
+  const slider1 = await prisma.slider.upsert({
+    where: { id: 'slider-1' },
+    update: {},
+    create: {
+      id: 'slider-1',
+      title: 'به فروشگاه آنلاین ما خوش آمدید',
+      link: '/products',
+      imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+      order: 1,
+      isActive: true,
+    },
+  })
+
+  const slider2 = await prisma.slider.upsert({
+    where: { id: 'slider-2' },
+    update: {},
+    create: {
+      id: 'slider-2',
+      title: 'محصولات با کیفیت و قیمت مناسب',
+      link: '/products',
+      imageUrl: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80',
+      order: 2,
+      isActive: true,
+    },
+  })
+
+  const slider3 = await prisma.slider.upsert({
+    where: { id: 'slider-3' },
+    update: {},
+    create: {
+      id: 'slider-3',
+      title: 'ارسال سریع و رایگان',
+      imageUrl: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80',
+      order: 3,
+      isActive: true,
+    },
+  })
+
+  console.log('Hierarchical categories and sliders created successfully!')
   console.log({ 
     adminUser, 
     rootCategories: [electronicsCategory, clothingCategory, homeCategory],
     subCategories: [smartphonesCategory, laptopsCategory, mensClothingCategory, womensClothingCategory],
-    subSubCategories: [androidPhonesCategory, iphonesCategory]
+    subSubCategories: [androidPhonesCategory, iphonesCategory],
+    sliders: [slider1, slider2, slider3]
   })
 }
 

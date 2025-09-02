@@ -2,9 +2,62 @@ import { ProductCard } from "@/components/ProductCard";
 import { Pagination } from "@/components/Pagination";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { SearchAutocomplete } from "@/components/SearchAutocomplete";
+import { Metadata } from "next";
 
 export const revalidate = 3600; // Revalidate every hour
+
+export async function generateMetadata({ searchParams }: ProductsPageProps): Promise<Metadata> {
+  const { category, search } = searchParams;
+  
+  let title = "محصولات - سامانه ارائه دهنده";
+  let description = "مشاهده تمام محصولات موجود در سامانه ارائه دهنده";
+  
+  if (category) {
+    const categoryData = await prisma.category.findUnique({
+      where: { slug: category },
+      select: { name: true }
+    });
+    
+    if (categoryData) {
+      title = `${categoryData.name} - محصولات - سامانه ارائه دهنده`;
+      description = `مشاهده محصولات دسته بندی ${categoryData.name} در سامانه ارائه دهنده`;
+    }
+  }
+  
+  if (search) {
+    title = `جستجو: ${search} - محصولات - سامانه ارائه دهنده`;
+    description = `نتایج جستجو برای "${search}" در محصولات سامانه ارائه دهنده`;
+  }
+  
+  if (category && search) {
+    const categoryData = await prisma.category.findUnique({
+      where: { slug: category },
+      select: { name: true }
+    });
+    
+    if (categoryData) {
+      title = `جستجو: ${search} در ${categoryData.name} - محصولات - سامانه ارائه دهنده`;
+      description = `نتایج جستجو برای "${search}" در دسته بندی ${categoryData.name}`;
+    }
+  }
+
+  return {
+    title,
+    description,
+    keywords: ["محصولات", "فروشگاه", "خرید", "دسته بندی", search || "", category ? "دسته بندی" : ""].filter(Boolean),
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      locale: "fa_IR",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 interface ProductsPageProps {
   searchParams: {
@@ -21,10 +74,24 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const currentPage = parseInt(page, 10) || 1;
 
   // Build the where clause for filtering
-  let whereClause: any = {};
+  const whereClause: {
+    categoryId?: string;
+    OR?: Array<{
+      name?: { contains: string; mode: 'insensitive' };
+      description?: { contains: string; mode: 'insensitive' };
+    }>;
+  } = {};
   
   if (category) {
-    whereClause.categoryId = category;
+    // Find category by slug first, then use its ID
+    const categoryData = await prisma.category.findUnique({
+      where: { slug: category },
+      select: { id: true }
+    });
+    
+    if (categoryData) {
+      whereClause.categoryId = categoryData.id;
+    }
   }
   
   if (search) {
@@ -32,13 +99,13 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       {
         name: {
           contains: search,
-          mode: 'insensitive' as any,
+          mode: 'insensitive' as const,
         },
       },
       {
         description: {
           contains: search,
-          mode: 'insensitive' as any,
+          mode: 'insensitive' as const,
         },
       },
     ];
@@ -69,7 +136,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   let categoryName = null;
   if (category) {
     const categoryData = await prisma.category.findUnique({
-      where: { id: category },
+      where: { slug: category },
       select: { name: true }
     });
     categoryName = categoryData?.name;

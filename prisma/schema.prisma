@@ -53,14 +53,28 @@ model Product {
   id          String   @id @default(uuid())
   name        String
   slug        String   @unique
-  imageUrls   String[]
   description String
   categoryId  String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  imageUrls   String[]
   category    Category @relation(fields: [categoryId], references: [id])
 
   @@index([categoryId])
+}
+
+model Slider {
+  id        String   @id @default(uuid())
+  title     String
+  link      String?
+  imageUrl  String
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+  @@index([isActive])
 }
 
 model User {

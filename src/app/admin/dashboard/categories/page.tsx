@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { generateSlug } from "@/lib/utils";
 
 interface Category {
   id: string;
@@ -213,15 +214,6 @@ export default function CategoriesManagement() {
     setEditingId(null);
   };
 
-  const generateSlug = (name: string) => {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
-  };
-
   const handleNameChange = (name: string) => {
     setFormData(prev => ({
       ...prev,
@@ -297,7 +289,7 @@ export default function CategoriesManagement() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      نامک *
+                      نامک (Slug) *
                     </label>
                     <input
                       type="text"
@@ -327,45 +319,63 @@ export default function CategoriesManagement() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     تصویر دسته‌بندی
                   </label>
-                  <div className="flex items-center gap-4">
-                    {formData.image && (
-                      <div className="relative">
+                  
+                  {/* File Upload Area */}
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+                    <div className="space-y-4">
+                      <div className="flex flex-col items-center">
+                        <svg className="w-12 h-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                          <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <p className="mt-2 text-sm text-gray-600">
+                          تصویر را انتخاب کنید
+                        </p>
+                      </div>
+                      
+                      <div className="flex justify-center">
+                        <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                          {uploading ? "در حال آپلود..." : formData.image ? "تغییر تصویر" : "انتخاب فایل"}
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                            disabled={uploading}
+                          />
+                        </label>
+                      </div>
+                      
+                      {uploading && (
+                        <p className="text-sm text-blue-600">در حال آپلود...</p>
+                      )}
+                      
+                      <p className="text-xs text-gray-500">
+                        فرمت‌های مجاز: JPEG, PNG, GIF, WebP (حداکثر 5MB)
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Image Preview */}
+                  {formData.image && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-medium text-gray-700 mb-3">تصویر آپلود شده:</h4>
+                      <div className="relative inline-block group">
                         <img
                           src={formData.image}
                           alt="پیش‌نمایش دسته‌بندی"
-                          className="w-24 h-24 object-cover rounded-lg border"
+                          className="w-32 h-32 object-cover rounded-md"
                         />
                         <button
                           type="button"
                           onClick={() => setFormData({ ...formData, image: "" })}
-                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                          className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-7 h-7 pt-0.5 flex items-center justify-center text-xs hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
                         >
-                          ×
+                          ✕
                         </button>
                       </div>
-                    )}
-                    <div>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        className="hidden"
-                      />
-                      <Button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        variant="outline"
-                        disabled={uploading}
-                        className="bg-gray-100 hover:bg-gray-200"
-                      >
-                        {uploading ? "در حال آپلود..." : formData.image ? "تغییر تصویر" : "آپلود تصویر"}
-                      </Button>
-                      <p className="text-xs text-gray-500 mt-1">
-                        فرمت‌های پشتیبانی شده: JPEG, PNG, GIF, WebP (حداکثر: 5 مگابایت)
-                      </p>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { phoneNumber } from "@/lib/utils";
 import { SearchAutocomplete } from "./SearchAutocomplete";
+import { User } from "lucide-react";
 
 // Custom hook to track navigation height changes
 function useNavigationHeight() {
@@ -59,14 +59,16 @@ interface Category {
 }
 
 // Component to render category tree
-function CategoryTreeItem({ 
-  category, 
-  onCategoryClick, 
-  level = 0 
-}: { 
-  category: Category; 
-  onCategoryClick: (categoryId: string) => void; 
+function CategoryTreeItem({
+  category,
+  onCategoryClick,
+  level = 0,
+  isMobile = false,
+}: {
+  category: Category;
+  onCategoryClick: (categoryId: string) => void;
   level?: number;
+  isMobile?: boolean;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -79,40 +81,53 @@ function CategoryTreeItem({
     }
   };
 
-  const handleCategoryClick = (e: React.MouseEvent) => {
+  const handleCategoryClickWithToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onCategoryClick(category.id);
+    if (isMobile && hasChildren) {
+      // در mobile mode، اگر فرزند دارد، فقط toggle کن
+      setIsExpanded(!isExpanded);
+    } else {
+      // در غیر این صورت، به صفحه محصولات برو
+      onCategoryClick(category.id);
+    }
   };
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
-    // فقط اگر فرزند دارد، ساختار درختی را باز کن
-    if (hasChildren) {
-      setIsExpanded(true);
+    if (!isMobile) {
+      setIsHovered(true);
+      // فقط اگر فرزند دارد، ساختار درختی را باز کن
+      if (hasChildren) {
+        setIsExpanded(true);
+      }
     }
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
-    // فقط اگر فرزند دارد، ساختار درختی را ببند
-    if (hasChildren) {
-      setIsExpanded(false);
+    if (!isMobile) {
+      setIsHovered(false);
+      // فقط اگر فرزند دارد، ساختار درختی را ببند
+      if (hasChildren) {
+        setIsExpanded(false);
+      }
     }
   };
 
   return (
-    <div 
+    <div
       className="w-full"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div 
+      <div
         className={`flex items-center justify-between px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-sm cursor-pointer ${
-          level > 0 ? 'border-r-2 border-gray-200' : ''
-        } ${isHovered ? 'bg-indigo-50 text-indigo-600' : ''}`}
+          level > 0 ? "border-r-2 border-gray-200" : ""
+        } ${isHovered ? "bg-indigo-50 text-indigo-600" : ""}`}
         style={{ paddingRight: `${level * 16 + 16}px` }}
       >
-        <div className="flex items-center gap-2 flex-1" onClick={handleCategoryClick}>
+        <div
+          className="flex items-center gap-2 flex-1"
+          onClick={handleCategoryClickWithToggle}
+        >
           {hasChildren && (
             <button
               onClick={handleToggle}
@@ -139,8 +154,6 @@ function CategoryTreeItem({
           <span className="flex-1 text-right">{category.name}</span>
         </div>
       </div>
-      
-
 
       {/* نمایش ساختار درختی برای دسته‌بندی‌هایی که فرزند دارند */}
       {hasChildren && isExpanded && (
@@ -151,6 +164,7 @@ function CategoryTreeItem({
               category={child}
               onCategoryClick={onCategoryClick}
               level={level + 1}
+              isMobile={isMobile}
             />
           ))}
         </div>
@@ -165,14 +179,14 @@ function buildCategoryTree(categories: Category[]): Category[] {
   const rootCategories: Category[] = [];
 
   // First pass: create a map of all categories
-  categories.forEach(category => {
+  categories.forEach((category) => {
     categoryMap.set(category.id, { ...category, children: [] });
   });
 
   // Second pass: build the tree structure
-  categories.forEach(category => {
+  categories.forEach((category) => {
     const categoryWithChildren = categoryMap.get(category.id)!;
-    
+
     if (category.parentId) {
       const parent = categoryMap.get(category.parentId);
       if (parent) {
@@ -190,7 +204,9 @@ export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSecondSectionVisible, setIsSecondSectionVisible] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isCategoriesDropdownOpen, setIsCategoriesDropdownOpen] = useState(false);
+  const [isCategoriesDropdownOpen, setIsCategoriesDropdownOpen] =
+    useState(false);
+  const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(false);
 
@@ -199,15 +215,18 @@ export function Navigation() {
 
   // Fetch categories when dropdown is opened
   useEffect(() => {
-    if (isCategoriesDropdownOpen && categories.length === 0) {
+    if (
+      (isCategoriesDropdownOpen || isMobileCategoriesOpen) &&
+      categories.length === 0
+    ) {
       fetchCategories();
     }
-  }, [isCategoriesDropdownOpen]);
+  }, [isCategoriesDropdownOpen, isMobileCategoriesOpen]);
 
   const fetchCategories = async () => {
     setIsLoadingCategories(true);
     try {
-      const response = await fetch('/api/categories');
+      const response = await fetch("/api/categories");
       if (response.ok) {
         const data = await response.json();
         // Filter only active categories
@@ -215,7 +234,7 @@ export function Navigation() {
         setCategories(activeCategories);
       }
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error("Error fetching categories:", error);
     } finally {
       setIsLoadingCategories(false);
     }
@@ -243,13 +262,13 @@ export function Navigation() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      if (!target.closest('.categories-dropdown')) {
+      if (!target.closest(".categories-dropdown")) {
         setIsCategoriesDropdownOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handlePhoneClick = (e: React.MouseEvent) => {
@@ -270,8 +289,13 @@ export function Navigation() {
     setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen);
   };
 
+  const toggleMobileCategories = () => {
+    setIsMobileCategoriesOpen(!isMobileCategoriesOpen);
+  };
+
   const handleCategoryClick = (categoryId: string) => {
     setIsCategoriesDropdownOpen(false);
+    setIsMobileCategoriesOpen(false);
     // Navigate to products page with category filter
     window.location.href = `/products?category=${categoryId}`;
   };
@@ -280,123 +304,127 @@ export function Navigation() {
   const categoryTree = buildCategoryTree(categories);
 
   return (
-         <nav
-       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out nav-height-transition ${
-         isScrolled
-           ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200"
-           : "bg-white shadow-sm"
-       }`}
-     >
-      <div className="container mx-auto px-4">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out nav-height-transition ${
+        isScrolled
+          ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200"
+          : "bg-white shadow-sm"
+      }`}
+    >
+      <div className=" mx-auto px-4">
         {/* Main Navigation Bar */}
         <div className="flex items-center justify-between h-auto">
-          <Link
-            href="/"
-            className={`font-bold flex items-center gap-2 text-2xl text-gray-800 hover:text-indigo-600 transition-all duration-300 ${
-              isScrolled ? "scale-105" : "scale-100"
-            }`}
-          >
-            <div className="py-2">
-              <img src="/images/logo.png" alt="logo" className="w-16 h-16" />
-            </div>
-            <h1> شرکت بازرگانی مرصاد</h1>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4 space-x-reverse">
-            <Link href="/products">
-              <Button
-                variant="ghost"
-                className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
-              >
-                محصولات
-              </Button>
+          <div className="flex items-center">
+            <Link
+              href="/"
+              className={`font-bold flex items-center gap-2 text-2xl text-gray-800 hover:text-indigo-600 transition-all duration-300 ${
+                isScrolled ? "scale-105" : "scale-100"
+              }`}
+            >
+              <div className="py-2">
+                <img src="/images/logo.png" alt="logo" className="w-16 h-16" />
+              </div>
+              <h1> شرکت بازرگانی مرصاد</h1>
             </Link>
-            
-            {/* Categories Dropdown */}
-            <div className="relative categories-dropdown">
-              <Button
-                variant="ghost"
-                className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center gap-1"
-                onClick={toggleCategoriesDropdown}
-              >
-                دسته بندی
-                <svg
-                  className={`w-4 h-4 transition-transform duration-200 ${
-                    isCategoriesDropdownOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+
+            {/* Desktop Navigation */}
+            <div className="hidden mdx:flex items-center space-x-4 space-x-reverse">
+              <Link href="/products">
+                <Button
+                  variant="ghost"
+                  className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </Button>
-              
-              {/* Dropdown Menu */}
-              {isCategoriesDropdownOpen && (
-                <div className="absolute top-full right-0 mt-1 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
-                  <div className="py-2">
-                    {isLoadingCategories ? (
-                      <div className="px-4 py-2 text-gray-500 text-center">
-                        در حال بارگذاری...
-                      </div>
-                    ) : categoryTree.length === 0 ? (
-                      <div className="px-4 py-2 text-gray-500 text-center">
-                        دسته بندی‌ای یافت نشد
-                      </div>
-                    ) : (
-                      categoryTree.map((category) => (
-                        <CategoryTreeItem
-                          key={category.id}
-                          category={category}
-                          onCategoryClick={handleCategoryClick}
-                        />
-                      ))
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
+                  محصولات
+                </Button>
+              </Link>
 
-            <Link href="/about">
-              <Button
-                variant="ghost"
-                className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
-              >
-                درباره ما
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button
-                variant="ghost"
-                className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
-              >
-                تماس با ما
-              </Button>
-            </Link>
+              {/* Categories Dropdown */}
+              <div className="relative categories-dropdown">
+                <Button
+                  variant="ghost"
+                  className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center gap-1"
+                  onClick={toggleCategoriesDropdown}
+                >
+                  دسته بندی
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isCategoriesDropdownOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </Button>
+
+                {/* Dropdown Menu */}
+                {isCategoriesDropdownOpen && (
+                  <div className="absolute top-full right-0 mt-1 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+                    <div className="py-2">
+                      {isLoadingCategories ? (
+                        <div className="px-4 py-2 text-gray-500 text-center">
+                          در حال بارگذاری...
+                        </div>
+                      ) : categoryTree.length === 0 ? (
+                        <div className="px-4 py-2 text-gray-500 text-center">
+                          دسته بندی‌ای یافت نشد
+                        </div>
+                      ) : (
+                        categoryTree.map((category) => (
+                          <CategoryTreeItem
+                            key={category.id}
+                            category={category}
+                            onCategoryClick={handleCategoryClick}
+                            isMobile={false}
+                          />
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <Link href="/about">
+                <Button
+                  variant="ghost"
+                  className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                >
+                  درباره ما
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button
+                  variant="ghost"
+                  className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                >
+                  تماس با ما
+                </Button>
+              </Link>
+            </div>
           </div>
 
           <div className="flex items-center space-x-2 space-x-reverse">
-            <Link href="/admin/login">
+            {/* Desktop User Button - only visible above mdx */}
+            <Link href="/admin/login" className="hidden mdx:block">
               <Button
                 variant="outline"
                 size="sm"
-                className="hover:bg-indigo-50 hover:border-indigo-300 transition-colors"
+                className="hover:bg-indigo-50 transition-colors"
               >
-                Admin Login
+                <User />
               </Button>
             </Link>
 
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMobileMenu}
-              className={`md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-300 ${
+              className={`mdx:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-300 ${
                 isMobileMenuOpen ? "rotate-90" : "rotate-0"
               }`}
             >
@@ -428,37 +456,67 @@ export function Navigation() {
 
         {/* Mobile Navigation Menu */}
         <div
-          className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${
+          className={`mdx:hidden transition-all duration-300 ease-in-out overflow-hidden ${
             isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
           }`}
         >
           <hr className="border-gray-200" />
-          <div className="py-4 space-y-2">
+          <div className="py-4">
             <Link href="/products">
               <Button
                 variant="ghost"
-                className="w-full justify-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                className="w-full text-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
               >
                 محصولات
               </Button>
             </Link>
-            
+
             {/* Mobile Categories Section */}
-            <div className="px-4 py-2">
-              <div className="text-sm font-medium text-gray-700 mb-2">دسته بندی‌ها:</div>
-              {isLoadingCategories ? (
-                <div className="text-sm text-gray-500">در حال بارگذاری...</div>
-              ) : categoryTree.length === 0 ? (
-                <div className="text-sm text-gray-500">دسته بندی‌ای یافت نشد</div>
-              ) : (
-                <div className="space-y-1">
-                  {categoryTree.map((category) => (
-                    <CategoryTreeItem
-                      key={category.id}
-                      category={category}
-                      onCategoryClick={handleCategoryClick}
-                    />
-                  ))}
+            <div className="">
+              <button
+                onClick={toggleMobileCategories}
+                className="w-full rounded-md py-2 px-4 flex items-center justify-between text font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+              >
+                <span>دسته بندی‌ها</span>
+                <svg
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    isMobileCategoriesOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {isMobileCategoriesOpen && (
+                <div className="mt-2">
+                  {isLoadingCategories ? (
+                    <div className="text-sm text-gray-500">
+                      در حال بارگذاری...
+                    </div>
+                  ) : categoryTree.length === 0 ? (
+                    <div className="text-sm text-gray-500">
+                      دسته بندی‌ای یافت نشد
+                    </div>
+                  ) : (
+                    <div className="space-y-1 max-h-60 overflow-y-auto">
+                      {categoryTree.map((category) => (
+                        <CategoryTreeItem
+                          key={category.id}
+                          category={category}
+                          onCategoryClick={handleCategoryClick}
+                          isMobile={true}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -466,7 +524,7 @@ export function Navigation() {
             <Link href="/about">
               <Button
                 variant="ghost"
-                className="w-full justify-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                className="w-full text-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
               >
                 درباره ما
               </Button>
@@ -474,9 +532,20 @@ export function Navigation() {
             <Link href="/contact">
               <Button
                 variant="ghost"
-                className="w-full justify-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                className="w-full text-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
               >
                 تماس با ما
+              </Button>
+            </Link>
+
+            {/* Mobile User Button */}
+            <Link href="/admin/login">
+              <Button
+                variant="ghost"
+                className="w-full flex items-center justify-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+              >
+                <User className="w-4 h-4 ml-2" />
+                <span>ورود</span>
               </Button>
             </Link>
           </div>
@@ -486,21 +555,23 @@ export function Navigation() {
         <div
           className={`transition-all duration-500 ease-in-out overflow-hidden ${
             isSecondSectionVisible
-              ? "max-h-20 opacity-100"
+              ? "max-h-24 opacity-100"
               : "max-h-0 opacity-0"
           }`}
         >
           <hr className="border-gray-200" />
-          <div className="flex items-center justify-between py-2 px-1 flex-col md:flex-row gap-4">
+          <div className="flex items-center justify-between py-2 px-1 flex-col mdx:flex-row gap-4">
             <div className="flex-1 max-w-md w-full">
               <SearchAutocomplete />
             </div>
             <div className="flex items-center justify-center gap-2 text-center">
-              <div className="text-gray-600 text-sm md:text-base">استعلام قیمت:</div>
+              <div className="text-gray-600 text-sm mdx:text-base">
+                استعلام قیمت:
+              </div>
               <button
                 dir="ltr"
                 onClick={handlePhoneClick}
-                className="text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer transition-colors font-medium text-sm md:text-base"
+                className="text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer transition-colors font-medium text-sm mdx:text-base"
               >
                 {phoneNumber}
               </button>
