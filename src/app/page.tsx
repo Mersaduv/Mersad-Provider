@@ -1,5 +1,6 @@
 import Slider from "@/components/Slider";
 import CategoriesSection from "@/components/CategoriesSection";
+import ArticlesSection from "@/components/ArticlesSection";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -28,6 +29,10 @@ export default function Home() {
 
       {/* Categories Section */}
       <CategoriesSection />
+
+      {/* Articles Section */}
+      <ArticlesSection />
+
     </div>
   );
 }

@@ -64,20 +64,26 @@ function CategoryTreeItem({
   onCategoryClick,
   level = 0,
   isMobile = false,
+  expandedCategories,
+  onToggleExpansion,
+  onCategoryHover,
 }: {
   category: Category;
-  onCategoryClick: (categoryId: string) => void;
+  onCategoryClick: (categorySlug: string) => void;
   level?: number;
   isMobile?: boolean;
+  expandedCategories: Set<string>;
+  onToggleExpansion: (categoryId: string) => void;
+  onCategoryHover: (categoryId: string) => void;
 }) {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const hasChildren = category.children && category.children.length > 0;
+  const isExpanded = expandedCategories.has(category.id);
 
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (hasChildren) {
-      setIsExpanded(!isExpanded);
+      onToggleExpansion(category.id);
     }
   };
 
@@ -85,11 +91,17 @@ function CategoryTreeItem({
     e.stopPropagation();
     if (isMobile && hasChildren) {
       // در mobile mode، اگر فرزند دارد، فقط toggle کن
-      setIsExpanded(!isExpanded);
+      onToggleExpansion(category.id);
     } else {
       // در غیر این صورت، به صفحه محصولات برو
-      onCategoryClick(category.id);
+      onCategoryClick(category.slug);
     }
+  };
+
+  const handleCategoryNameClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    // همیشه به صفحه محصولات برو
+    onCategoryClick(category.slug);
   };
 
   const handleMouseEnter = () => {
@@ -97,7 +109,7 @@ function CategoryTreeItem({
       setIsHovered(true);
       // فقط اگر فرزند دارد، ساختار درختی را باز کن
       if (hasChildren) {
-        setIsExpanded(true);
+        onCategoryHover(category.id);
       }
     }
   };
@@ -105,10 +117,8 @@ function CategoryTreeItem({
   const handleMouseLeave = () => {
     if (!isMobile) {
       setIsHovered(false);
-      // فقط اگر فرزند دارد، ساختار درختی را ببند
-      if (hasChildren) {
-        setIsExpanded(false);
-      }
+      // دیگر زیردسته‌ها را با unhover ببند نکن
+      // فقط hover state را تغییر بده
     }
   };
 
@@ -119,24 +129,54 @@ function CategoryTreeItem({
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className={`flex items-center justify-between px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-sm cursor-pointer ${
-          level > 0 ? "border-r-2 border-gray-200" : ""
-        } ${isHovered ? "bg-indigo-50 text-indigo-600" : ""}`}
-        style={{ paddingRight: `${level * 16 + 16}px` }}
+        className={`flex items-center justify-between px-4 py-3 hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-sm ${
+          isHovered ? "bg-indigo-50 text-indigo-600" : ""
+        }`}
+        style={{ paddingRight: `${level * 20 + 16}px` }}
       >
-        <div
-          className="flex items-center gap-2 flex-1"
-          onClick={handleCategoryClickWithToggle}
-        >
-          {hasChildren && (
-            <button
-              onClick={handleToggle}
-              className="w-4 h-4 flex items-center justify-center text-gray-500 hover:text-indigo-600 transition-colors"
+        {isMobile ? (
+          // Mobile layout: Plus button + Category name + Blue arrow
+          <div className="flex items-center gap-3 flex-1">
+            {/* Plus button for expanding children */}
+            <div className="w-4 h-4 flex items-center justify-center">
+              {hasChildren ? (
+                <button
+                  onClick={handleToggle}
+                  className="text-gray-500 hover:text-indigo-600 transition-colors"
+                >
+                  <svg
+                    className={`w-6 h-6 transition-transform duration-200 ${
+                      isExpanded ? "rotate-45" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                </button>
+              ) : (
+                <div className="w-3 h-3"></div>
+              )}
+            </div>
+            
+            {/* Category name - clickable */}
+            <span 
+              className="flex-1 text-right font-medium cursor-pointer"
+              onClick={handleCategoryNameClick}
             >
+              {category.name}
+            </span>
+            
+            {/* Blue arrow for navigation */}
+            <div className="w-6 h-6 flex items-center justify-center rotate-180">
               <svg
-                className={`w-3 h-3 transition-transform duration-200 ${
-                  isExpanded ? "rotate-90" : ""
-                } ${isHovered ? "text-indigo-600" : ""}`}
+                className="w-6 h-6 text-blue-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -148,11 +188,57 @@ function CategoryTreeItem({
                   d="M9 5l7 7-7 7"
                 />
               </svg>
-            </button>
-          )}
-          {!hasChildren && <div className="w-4"></div>}
-          <span className="flex-1 text-right">{category.name}</span>
-        </div>
+            </div>
+          </div>
+        ) : (
+          // Desktop layout: Original design
+          <div
+            className="flex items-center gap-3 flex-1 cursor-pointer"
+            onClick={handleCategoryClickWithToggle}
+          >
+            {/* Arrow icon for all items */}
+            <div className="w-4 h-4 flex items-center justify-center">
+              {hasChildren ? (
+                <button
+                  onClick={handleToggle}
+                  className="text-gray-500 hover:text-indigo-600 transition-colors"
+                >
+                  <svg
+                    className={`w-3 h-3 transition-transform duration-200 ${
+                      isExpanded ? "rotate-90" : ""
+                    } ${isHovered ? "text-indigo-600" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              ) : (
+                <svg
+                  className="w-3 h-3 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              )}
+            </div>
+            
+            <span className="flex-1 text-right font-medium">{category.name}</span>
+          </div>
+        )}
       </div>
 
       {/* نمایش ساختار درختی برای دسته‌بندی‌هایی که فرزند دارند */}
@@ -165,10 +251,63 @@ function CategoryTreeItem({
               onCategoryClick={onCategoryClick}
               level={level + 1}
               isMobile={isMobile}
+              expandedCategories={expandedCategories}
+              onToggleExpansion={onToggleExpansion}
+              onCategoryHover={onCategoryHover}
             />
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+// Component to render tree-style category dropdown for desktop
+function TreeCategoryDropdown({
+  categories,
+  onCategoryClick,
+  isLoading,
+  expandedCategories,
+  onToggleExpansion,
+  onCategoryHover,
+}: {
+  categories: Category[];
+  onCategoryClick: (categorySlug: string) => void;
+  isLoading: boolean;
+  expandedCategories: Set<string>;
+  onToggleExpansion: (categoryId: string) => void;
+  onCategoryHover: (categoryId: string) => void;
+}) {
+  if (isLoading) {
+    return (
+      <div className="px-4 py-8 text-center text-gray-500">
+        <div className="text-sm">در حال بارگذاری...</div>
+      </div>
+    );
+  }
+
+  if (categories.length === 0) {
+    return (
+      <div className="px-4 py-8 text-center text-gray-500">
+        <div className="text-sm">دسته بندی‌ای یافت نشد</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-2">
+      {categories.map((category) => (
+        <CategoryTreeItem
+          key={category.id}
+          category={category}
+          onCategoryClick={onCategoryClick}
+          level={0}
+          isMobile={false}
+          expandedCategories={expandedCategories}
+          onToggleExpansion={onToggleExpansion}
+          onCategoryHover={onCategoryHover}
+        />
+      ))}
     </div>
   );
 }
@@ -209,6 +348,7 @@ export function Navigation() {
   const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(false);
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
 
   // Use the custom hook
   useNavigationHeight();
@@ -286,18 +426,41 @@ export function Navigation() {
   };
 
   const toggleCategoriesDropdown = () => {
-    setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen);
+    const newState = !isCategoriesDropdownOpen;
+    setIsCategoriesDropdownOpen(newState);
+    // Clear expanded categories when closing dropdown
+    if (!newState) {
+      setExpandedCategories(new Set());
+    }
   };
 
   const toggleMobileCategories = () => {
     setIsMobileCategoriesOpen(!isMobileCategoriesOpen);
   };
 
-  const handleCategoryClick = (categoryId: string) => {
+  const handleCategoryClick = (categorySlug: string) => {
     setIsCategoriesDropdownOpen(false);
     setIsMobileCategoriesOpen(false);
+    // Clear expanded categories when navigating
+    setExpandedCategories(new Set());
     // Navigate to products page with category filter
-    window.location.href = `/products?category=${categoryId}`;
+    window.location.href = `/products?category=${categorySlug}`;
+  };
+
+  const toggleCategoryExpansion = (categoryId: string) => {
+    setExpandedCategories(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(categoryId)) {
+        newSet.delete(categoryId);
+      } else {
+        newSet.add(categoryId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleCategoryHover = (categoryId: string) => {
+    setExpandedCategories(prev => new Set(prev).add(categoryId));
   };
 
   // Build category tree
@@ -363,29 +526,17 @@ export function Navigation() {
                   </svg>
                 </Button>
 
-                {/* Dropdown Menu */}
+                {/* Tree-style Dropdown Menu */}
                 {isCategoriesDropdownOpen && (
-                  <div className="absolute top-full right-0 mt-1 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
-                    <div className="py-2">
-                      {isLoadingCategories ? (
-                        <div className="px-4 py-2 text-gray-500 text-center">
-                          در حال بارگذاری...
-                        </div>
-                      ) : categoryTree.length === 0 ? (
-                        <div className="px-4 py-2 text-gray-500 text-center">
-                          دسته بندی‌ای یافت نشد
-                        </div>
-                      ) : (
-                        categoryTree.map((category) => (
-                          <CategoryTreeItem
-                            key={category.id}
-                            category={category}
-                            onCategoryClick={handleCategoryClick}
-                            isMobile={false}
-                          />
-                        ))
-                      )}
-                    </div>
+                  <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-80 max-w-md overflow-hidden">
+                    <TreeCategoryDropdown
+                      categories={categoryTree}
+                      onCategoryClick={handleCategoryClick}
+                      isLoading={isLoadingCategories}
+                      expandedCategories={expandedCategories}
+                      onToggleExpansion={toggleCategoryExpansion}
+                      onCategoryHover={handleCategoryHover}
+                    />
                   </div>
                 )}
               </div>
@@ -513,6 +664,9 @@ export function Navigation() {
                           category={category}
                           onCategoryClick={handleCategoryClick}
                           isMobile={true}
+                          expandedCategories={expandedCategories}
+                          onToggleExpansion={toggleCategoryExpansion}
+                          onCategoryHover={handleCategoryHover}
                         />
                       ))}
                     </div>

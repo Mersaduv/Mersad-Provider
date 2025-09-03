@@ -241,7 +241,7 @@ export function SearchAutocomplete({
             onKeyDown={handleKeyDown}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
-            placeholder="جستجو در محصولات..."
+            placeholder="جستجو..."
             className="w-full px-4 py-2 pr-12 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white text-gray-900 placeholder-gray-500"
             dir="rtl"
           />

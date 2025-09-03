@@ -1,6 +1,7 @@
 import { ProductCard } from "@/components/ProductCard";
 import { Pagination } from "@/components/Pagination";
 import { prisma } from "@/lib/prisma";
+import { getAllDescendantCategoryIds } from "@/lib/utils";
 import Link from "next/link";
 import { Metadata } from "next";
 
@@ -75,7 +76,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
   // Build the where clause for filtering
   const whereClause: {
-    categoryId?: string;
+    categoryId?: string | { in: string[] };
     OR?: Array<{
       name?: { contains: string; mode: 'insensitive' };
       description?: { contains: string; mode: 'insensitive' };
@@ -90,7 +91,16 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     });
     
     if (categoryData) {
-      whereClause.categoryId = categoryData.id;
+      // Get all descendant category IDs (including the parent itself)
+      const allCategoryIds = await getAllDescendantCategoryIds(categoryData.id);
+      
+      // If there are multiple categories (parent + children), use 'in' operator
+      if (allCategoryIds.length > 1) {
+        whereClause.categoryId = { in: allCategoryIds };
+      } else {
+        // If no children, just use the single category ID
+        whereClause.categoryId = categoryData.id;
+      }
     }
   }
   

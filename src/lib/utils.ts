@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { prisma } from "./prisma";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -59,3 +60,29 @@ export function generateSlug(text: string): string {
     .substring(0, 60);
 }
 export const phoneNumber = "+93702185538";
+
+// Get all descendant category IDs for a given parent category
+export async function getAllDescendantCategoryIds(parentCategoryId: string): Promise<string[]> {
+  const allCategoryIds: string[] = [parentCategoryId];
+  
+  // Recursive function to get all children
+  async function getChildrenIds(categoryId: string): Promise<void> {
+    const children = await prisma.category.findMany({
+      where: {
+        parentId: categoryId,
+        isActive: true
+      },
+      select: {
+        id: true
+      }
+    });
+    
+    for (const child of children) {
+      allCategoryIds.push(child.id);
+      await getChildrenIds(child.id); // Recursively get grandchildren
+    }
+  }
+  
+  await getChildrenIds(parentCategoryId);
+  return allCategoryIds;
+}
