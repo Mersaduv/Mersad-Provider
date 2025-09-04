@@ -55,12 +55,15 @@ model Product {
   slug        String   @unique
   description String
   categoryId  String
+  bestSelling Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   imageUrls   String[]
   category    Category @relation(fields: [categoryId], references: [id])
 
   @@index([categoryId])
+  @@index([bestSelling])
+  @@index([createdAt])
 }
 
 model Slider {

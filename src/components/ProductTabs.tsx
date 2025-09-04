@@ -57,7 +57,7 @@ export function ProductTabs({ product }: ProductTabsProps) {
 
             {/* Product Specifications */}
             <div className="bg-gray-50 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">مشخصات فنی محصول</h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">مشخصات</h3>
               
               {product.category.attributes && product.category.attributes.length > 0 ? (
                 <div className="space-y-3">
@@ -75,7 +75,7 @@ export function ProductTabs({ product }: ProductTabsProps) {
                 </div>
               ) : (
                 <div className="text-center py-8 text-gray-500">
-                  <p>مشخصات فنی برای این محصول تعریف نشده است</p>
+                  <p>مشخصات برای این محصول تعریف نشده است</p>
                 </div>
               )}
             </div>

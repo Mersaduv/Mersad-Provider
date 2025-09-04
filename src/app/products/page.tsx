@@ -8,7 +8,7 @@ import { Metadata } from "next";
 export const revalidate = 3600; // Revalidate every hour
 
 export async function generateMetadata({ searchParams }: ProductsPageProps): Promise<Metadata> {
-  const { category, search } = searchParams;
+  const { category, search, sort } = searchParams;
   
   let title = "محصولات - سامانه ارائه دهنده";
   let description = "مشاهده تمام محصولات موجود در سامانه ارائه دهنده";
@@ -28,6 +28,14 @@ export async function generateMetadata({ searchParams }: ProductsPageProps): Pro
   if (search) {
     title = `جستجو: ${search} - محصولات - سامانه ارائه دهنده`;
     description = `نتایج جستجو برای "${search}" در محصولات سامانه ارائه دهنده`;
+  }
+  
+  if (sort === 'best-selling') {
+    title = `پرفروش‌ترین محصولات - سامانه ارائه دهنده`;
+    description = `مشاهده پرفروش‌ترین محصولات در سامانه ارائه دهنده`;
+  } else if (sort === 'newest') {
+    title = `جدیدترین محصولات - سامانه ارائه دهنده`;
+    description = `مشاهده جدیدترین محصولات در سامانه ارائه دهنده`;
   }
   
   if (category && search) {
@@ -65,13 +73,14 @@ interface ProductsPageProps {
     category?: string;
     page?: string;
     search?: string;
+    sort?: string;
   };
 }
 
 const ITEMS_PER_PAGE = 1; // Number of products per page
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
-  const { category, page = "1", search } = searchParams;
+  const { category, page = "1", search, sort } = searchParams;
   const currentPage = parseInt(page, 10) || 1;
 
   // Build the where clause for filtering
@@ -129,15 +138,22 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
   const skip = (currentPage - 1) * ITEMS_PER_PAGE;
 
+  // Determine orderBy based on sort parameter
+  let orderBy: { createdAt?: 'desc' | 'asc'; bestSelling?: 'desc' | 'asc' } = { createdAt: 'desc' }; // Default to newest first
+  
+  if (sort === 'best-selling') {
+    orderBy = { bestSelling: 'desc' };
+  } else if (sort === 'newest') {
+    orderBy = { createdAt: 'desc' };
+  }
+
   // Get products with pagination
   const products = await prisma.product.findMany({
     where: whereClause,
     include: {
       category: true,
     },
-    orderBy: {
-      createdAt: 'desc'
-    },
+    orderBy,
     skip,
     take: ITEMS_PER_PAGE,
   });
@@ -159,6 +175,9 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   }
   if (search) {
     paginationSearchParams.search = search;
+  }
+  if (sort) {
+    paginationSearchParams.sort = sort;
   }
 
   return (
@@ -187,6 +206,18 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                   <li>جستجو: {search}</li>
                 </>
               )}
+              {sort === 'best-selling' && (
+                <>
+                  <li className="text-gray-300">/</li>
+                  <li>پرفروش‌ترین</li>
+                </>
+              )}
+              {sort === 'newest' && (
+                <>
+                  <li className="text-gray-300">/</li>
+                  <li>جدیدترین</li>
+                </>
+              )}
             </ol>
           </nav>
         </div>
@@ -198,7 +229,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           <p>
             {categoryName && ` در دسته بندی "${categoryName}"`}
             {search && ` برای جستجوی "${search}"`}
-            {categoryName && search && ' و '}
+            {sort === 'best-selling' && ` پرفروش‌ترین محصولات`}
+            {sort === 'newest' && ` جدیدترین محصولات`}
+            {categoryName && (search || sort) && ' و '}
+            {search && sort && ' و '}
           </p>
         </div>
         
@@ -234,7 +268,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                   name={product.name}
                   description={product.description}
                   imageUrls={product.imageUrls}
-                  categoryName={product.category.name}
+                  category={product.category}
                 />
               ))}
             </div>

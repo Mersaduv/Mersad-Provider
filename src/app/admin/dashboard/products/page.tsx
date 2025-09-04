@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { generateSlug } from "@/lib/utils";
 import dynamic from "next/dynamic";
@@ -16,6 +17,7 @@ interface Product {
   description: string;
   imageUrls: string[];
   categoryId: string;
+  bestSelling: boolean;
   category: {
     id: string;
     name: string;
@@ -99,6 +101,29 @@ export default function ProductsManagement() {
     }
   };
 
+  const handleToggleBestSelling = async (productId: string, bestSelling: boolean) => {
+    try {
+      const response = await fetch(`/api/products/${productId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ bestSelling }),
+      });
+
+      if (response.ok) {
+        setProducts(products.map(p => 
+          p.id === productId ? { ...p, bestSelling } : p
+        ));
+      } else {
+        alert("خطا در به‌روزرسانی وضعیت پرفروش");
+      }
+    } catch (error) {
+      console.error("Error toggling best selling:", error);
+      alert("خطا در ارتباط با سرور");
+    }
+  };
+
   if (status === "loading" || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -153,6 +178,9 @@ export default function ProductsManagement() {
                       دسته‌بندی
                     </th>
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      پرفروش
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       تاریخ ایجاد
                     </th>
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -166,10 +194,12 @@ export default function ProductsManagement() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex-shrink-0 h-12 w-12">
                           {product.imageUrls && product.imageUrls.length > 0 ? (
-                            <img
+                            <Image
                               className="h-12 w-12 rounded-lg object-cover"
                               src={product.imageUrls[0]}
                               alt={product.name}
+                              width={48}
+                              height={48}
                             />
                           ) : (
                             <div className="h-12 w-12 rounded-lg bg-gray-200 flex items-center justify-center">
@@ -192,6 +222,18 @@ export default function ProductsManagement() {
                         <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                           {product.category.name}
                         </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button
+                          onClick={() => handleToggleBestSelling(product.id, !product.bestSelling)}
+                          className={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full transition-colors ${
+                            product.bestSelling
+                              ? 'bg-red-100 text-red-800 hover:bg-red-200'
+                              : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                          }`}
+                        >
+                          {product.bestSelling ? 'پرفروش' : 'عادی'}
+                        </button>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {new Date(product.createdAt).toLocaleDateString('fa-IR')}
@@ -265,6 +307,7 @@ function ProductForm({
     description: product?.description || "",
     imageUrls: product?.imageUrls || [],
     categoryId: product?.categoryId || "",
+    bestSelling: product?.bestSelling || false,
   });
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -436,6 +479,23 @@ function ProductForm({
                   ))}
                 </select>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  وضعیت محصول
+                </label>
+                <div className="flex items-center space-x-4 space-x-reverse">
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={formData.bestSelling}
+                      onChange={(e) => setFormData({ ...formData, bestSelling: e.target.checked })}
+                      className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                    />
+                    <span className="mr-2 text-sm text-gray-700">پرفروش</span>
+                  </label>
+                </div>
+              </div>
             </div>
 
             <div>
@@ -490,10 +550,12 @@ function ProductForm({
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {formData.imageUrls.map((url, index) => (
                       <div key={index} className="relative group">
-                        <img
+                        <Image
                           src={url}
                           alt={`تصویر ${index + 1}`}
                           className="w-full h-24 object-cover rounded-md"
+                          width={96}
+                          height={96}
                         />
                         <button
                           type="button"
