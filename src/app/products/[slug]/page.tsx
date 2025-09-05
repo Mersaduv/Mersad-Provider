@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ProductImageGallery } from "@/components/ProductImageGallery";
 import { ProductSiteItems } from "@/components/ProductSiteItems";
 import { ProductTabs } from "@/components/ProductTabs";
+import ParentCategoryProductSlider from "@/components/ParentCategoryProductSlider";
 
 import PhoneButton from "@/components/PhoneButton";
 import { Metadata } from "next";
@@ -74,6 +75,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
       category: {
         include: {
           attributes: true,
+          parent: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              level: true,
+            },
+          },
         },
       },
     },
@@ -206,6 +215,31 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         {/* Product Information Tabs */}
         <ProductTabs product={transformedProduct} />
+
+        {/* Related Products Slider */}
+        <ParentCategoryProductSlider
+          categoryId={product.categoryId}
+          categoryName={product.category.name}
+          categorySlug={product.category.slug}
+          title={`محصولات مرتبط با ${product.category.name}`}
+          description={`محصولات مشابه از دسته‌بندی ${product.category.name} و دسته‌بندی‌های مرتبط`}
+          icon={
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+          }
+          limit={8}
+        />
       </div>
     </div>
   );

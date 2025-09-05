@@ -5,7 +5,6 @@ import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import { phoneNumber } from "@/lib/utils";
 import { SearchAutocomplete } from "./SearchAutocomplete";
-import { User } from "lucide-react";
 
 // Custom hook to track navigation height changes
 function useNavigationHeight() {
@@ -566,9 +565,22 @@ export function Navigation() {
               <Button
                 variant="outline"
                 size="sm"
-                className="hover:bg-indigo-50 transition-colors"
+                className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center gap-2"
               >
-                <User />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                  />
+                </svg>
+                <span className="text-sm font-medium">ورود</span>
               </Button>
             </Link>
 
@@ -698,8 +710,20 @@ export function Navigation() {
                 variant="ghost"
                 className="w-full flex items-center justify-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
               >
-                <User className="w-4 h-4 ml-2" />
-                <span>ورود</span>
+                <svg
+                  className="w-5 h-5 ml-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                  />
+                </svg>
+                <span className="font-medium">ورود</span>
               </Button>
             </Link>
           </div>

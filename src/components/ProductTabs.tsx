@@ -74,8 +74,7 @@ export function ProductTabs({ product }: ProductTabsProps) {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <p>مشخصات برای این محصول تعریف نشده است</p>
+                <div className="text-center py-0 text-gray-500">
                 </div>
               )}
             </div>

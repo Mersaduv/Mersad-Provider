@@ -2,8 +2,8 @@ import Slider from "@/components/Slider";
 import ProductSlider from "@/components/ProductSlider";
 import CategoriesSection from "@/components/CategoriesSection";
 import ArticlesSection from "@/components/ArticlesSection";
-import AboutSection from "@/components/AboutSection";
 import { Metadata } from "next";
+import AboutSection from "@/components/AboutSection";
 
 export const metadata: Metadata = {
   title: "خانه - شرکت بازرگانی مرصاد",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="mx-auto px-4 py-8">
       {/* Main Slider Section */}
       <Slider />
 

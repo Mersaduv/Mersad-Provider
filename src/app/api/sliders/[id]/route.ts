@@ -3,11 +3,12 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const slider = await prisma.slider.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!slider) {
@@ -29,9 +30,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { title, link, imageUrl, order, isActive } = body;
 
@@ -43,7 +45,7 @@ export async function PUT(
     }
 
     const slider = await prisma.slider.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
         link: link || null,
@@ -65,11 +67,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await prisma.slider.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: "Slider deleted successfully" });

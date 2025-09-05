@@ -25,14 +25,14 @@ export default function CustomCKEditor({
   useEffect(() => {
     // Set RTL direction for Persian text
     if (editorRef.current?.editing?.view?.document?.getRoot()) {
-      const root = editorRef.current.editing.view.document.getRoot();
+      const root = (editorRef.current as any).editing.view.document.getRoot();
       if (root) {
         root._setAttribute('dir', 'rtl');
       }
     }
   }, []);
 
-  const editorConfig = {
+  const editorConfig: any = {
     language: 'fa',
     direction: 'rtl',
     placeholder: placeholder,
@@ -81,12 +81,12 @@ export default function CustomCKEditor({
     heading: {
       options: [
         { model: 'paragraph', title: 'پاراگراف', class: 'ck-heading_paragraph' },
-        { model: 'heading1', view: 'h1', title: 'عنوان 1', class: 'ck-heading_heading1' },
-        { model: 'heading2', view: 'h2', title: 'عنوان 2', class: 'ck-heading_heading2' },
-        { model: 'heading3', view: 'h3', title: 'عنوان 3', class: 'ck-heading_heading3' },
-        { model: 'heading4', view: 'h4', title: 'عنوان 4', class: 'ck-heading_heading4' },
-        { model: 'heading5', view: 'h5', title: 'عنوان 5', class: 'ck-heading_heading5' },
-        { model: 'heading6', view: 'h6', title: 'عنوان 6', class: 'ck-heading_heading6' }
+        { model: 'heading1' as const, view: 'h1', title: 'عنوان 1', class: 'ck-heading_heading1' },
+        { model: 'heading2' as const, view: 'h2', title: 'عنوان 2', class: 'ck-heading_heading2' },
+        { model: 'heading3' as const, view: 'h3', title: 'عنوان 3', class: 'ck-heading_heading3' },
+        { model: 'heading4' as const, view: 'h4', title: 'عنوان 4', class: 'ck-heading_heading4' },
+        { model: 'heading5' as const, view: 'h5', title: 'عنوان 5', class: 'ck-heading_heading5' },
+        { model: 'heading6' as const, view: 'h6', title: 'عنوان 6', class: 'ck-heading_heading6' }
       ]
     },
     fontSize: {
@@ -208,8 +208,7 @@ export default function CustomCKEditor({
   return (
     <div className={`ckeditor-container ${className}`}>
              <CKEditor
-         ref={editorRef}
-         editor={DecoupledEditor}
+         editor={DecoupledEditor as any}
          config={editorConfig}
          data={value}
          disabled={disabled}
@@ -223,7 +222,7 @@ export default function CustomCKEditor({
             });
             
             // Store editor reference
-            editorRef.current = editor;
+            editorRef.current = editor as any;
             
             // Fix list and heading behavior
             editor.editing.view.document.on('enter', (evt, data) => {
@@ -261,12 +260,12 @@ export default function CustomCKEditor({
                 
                 // If we're in a list item, ensure it's properly separated
                 if (element.name === 'listItem') {
-                  const nextElement = position.getNextSibling();
+                  const nextElement = (position as any).getNextSibling();
                   if (nextElement && nextElement.name !== 'listItem') {
                     // Insert a paragraph after the list
                     editor.model.change(writer => {
                       const paragraph = writer.createElement('paragraph');
-                      writer.insert(paragraph, position.getNextSibling());
+                      writer.insert(paragraph, (position as any).getNextSibling());
                     });
                   }
                 }
@@ -274,7 +273,7 @@ export default function CustomCKEditor({
             });
             
             // Insert toolbar into the DOM
-            const toolbarElement = editor.ui.view.toolbar.element;
+            const toolbarElement = editor.ui.view.toolbar?.element;
             const editorElement = editor.ui.view.editable.element;
             
             if (toolbarElement && editorElement) {

@@ -4,11 +4,12 @@ import { NextRequest, NextResponse } from 'next/server'
 // GET /api/articles/[id] - Get a specific article
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const article = await prisma.article.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
     
     if (!article) {
@@ -31,9 +32,10 @@ export async function GET(
 // PUT /api/articles/[id] - Update an article
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const json = await request.json()
     
     // Validate required fields
@@ -46,7 +48,7 @@ export async function PUT(
 
     // Check if article exists
     const existingArticle = await prisma.article.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
     
     if (!existingArticle) {
@@ -60,7 +62,7 @@ export async function PUT(
     const slugConflict = await prisma.article.findFirst({
       where: { 
         slug: json.slug,
-        id: { not: params.id }
+        id: { not: id }
       }
     })
     
@@ -72,7 +74,7 @@ export async function PUT(
     }
     
     const article = await prisma.article.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title: json.title,
         description: json.description,
@@ -106,12 +108,13 @@ export async function PUT(
 // DELETE /api/articles/[id] - Delete an article
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     // Check if article exists
     const existingArticle = await prisma.article.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
     
     if (!existingArticle) {
@@ -122,7 +125,7 @@ export async function DELETE(
     }
     
     await prisma.article.delete({
-      where: { id: params.id }
+      where: { id }
     })
     
     return NextResponse.json({ message: 'مقاله با موفقیت حذف شد' })

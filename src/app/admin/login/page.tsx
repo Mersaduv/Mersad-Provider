@@ -46,10 +46,10 @@ export default function AdminLogin() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h1 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            ورود ادمین
+            ورود
           </h1>
           <p className="mt-2 text-center text-sm text-gray-600">
-            اطلاعات ورود خود را برای دسترسی به پنل ادمین وارد کنید
+            اطلاعات ورود خود را برای دسترسی به پنل وارد کنید
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Metadata } from "next";
+import InteractiveMap from "@/components/InteractiveMap";
+import LocationInfo from "@/components/LocationInfo";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -137,7 +138,7 @@ export default function ContactPage() {
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="contact-input"
-                    placeholder="۰۹۱۲۳۴۵۶۷۸۹"
+                    placeholder="0701234567"
                   />
                 </div>
 
@@ -234,14 +235,8 @@ export default function ContactPage() {
                     <div>
                       <h4 className="font-semibold text-orange-500 mb-1">دفتر هرات</h4>
                       <p className="text-gray-600 text-sm">
-                        شهر نو مقابل خراسان مارکت<br />
+                        هرات,جاده عیدگاه<br />
                         دفتر کیمیاگر فارما
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-orange-500 mb-1">دفتر کابل</h4>
-                      <p className="text-gray-600 text-sm">
-                        در حال راه‌اندازی
                       </p>
                     </div>
                   </div>
@@ -262,14 +257,14 @@ export default function ContactPage() {
                       href="tel:0702185538"
                       className="contact-phone-link"
                     >
-                      <span className="font-mono">۰۷۰۲۱۸۵۵۳۸</span>
+                      <span className="font-mono">0702185538</span>
                       <span className="text-sm text-gray-500">(هرات)</span>
                     </a>
                     <a
                       href="tel:0702185538"
                       className="contact-phone-link"
                     >
-                      <span className="font-mono">۰۷۰۲۱۸۵۵۳۸</span>
+                      <span className="font-mono">0702185538</span>
                       <span className="text-sm text-gray-500">(کابل)</span>
                     </a>
                   </div>
@@ -286,10 +281,10 @@ export default function ContactPage() {
                 <div>
                   <h3 className="contact-info-card-title">ایمیل</h3>
                   <a
-                    href="mailto:mersadkarimi0@gmail.com"
+                    href="mailto:mersadkarimi001@gmail.com"
                     className="contact-email-link"
                   >
-                    mersadkarimi0@gmail.com
+                    mersadkarimi001@gmail.com
                   </a>
                 </div>
               </div>
@@ -351,9 +346,7 @@ export default function ContactPage() {
                 <div>
                   <h3 className="contact-info-card-title">ساعات کاری</h3>
                   <div className="space-y-1 text-sm text-gray-600">
-                    <p>شنبه تا چهارشنبه: ۸:۰۰ - ۱۷:۰۰</p>
-                    <p>پنج‌شنبه: ۸:۰۰ - ۱۲:۰۰</p>
-                    <p>جمعه: تعطیل</p>
+                    <p>همه روز های هفته : 7:00 - 23:00</p>
                   </div>
                 </div>
               </div>
@@ -367,24 +360,29 @@ export default function ContactPage() {
             <h2 className="contact-map-title text-3xl font-bold text-center mb-8">
               موقعیت دفاتر ما
             </h2>
-            <div className="contact-map-wrapper">
-              <div className="contact-map-placeholder">
-                <div className="contact-map-icon">
-                  <svg className="w-16 h-16 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">نقشه در حال بارگذاری</h3>
-                <p className="text-gray-600 mb-4">
-                  نقشه تعاملی دفاتر ما به زودی در دسترس خواهد بود
-                </p>
-                <div className="flex flex-wrap justify-center gap-4">
-                  <div className="contact-map-info">
-                    <h4 className="font-semibold text-orange-500">دفتر هرات</h4>
-                    <p className="text-sm text-gray-600">شهر نو مقابل خراسان مارکت</p>
-                  </div>
-                </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Location Info Card */}
+              <div className="order-2 lg:order-1">
+                <LocationInfo
+                  coordinates={{
+                    lat: 34.350471,
+                    lng: 62.189211
+                  }}
+                  className="h-full"
+                />
+              </div>
+              
+              {/* Interactive Map */}
+              <div className="order-1 lg:order-2">
+                <InteractiveMap
+                  center={{
+                    lat: 34.350471,
+                    lng: 62.189211
+                  }}
+                  zoom={16}
+                  className="w-full h-full min-h-96"
+                />
               </div>
             </div>
           </div>

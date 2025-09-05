@@ -36,7 +36,7 @@ export default function Footer() {
               </div>
               <div className="mr-6 space-y-2">
                 <p className="text-gray-200 text-sm">
-                  شهر نو مقابل خراسان مارکت دفتر کیمیاگر فارما
+                  هرات,جاده عیدگاه دفتر کیمیاگر فارما
                 </p>
                 <div className="footer-contact-item flex items-center gap-2">
                   <div className="footer-contact-icon w-4 h-4 bg-pink-400 rounded-full flex-shrink-0"></div>
@@ -44,7 +44,7 @@ export default function Footer() {
                     href="tel:0702185538"
                     className="text-gray-200 hover:text-orange-300 transition-colors text-lg underline"
                   >
-                    ۰۷۰۲۱۸۵۵۳۸
+                    0702185538
                   </a>
                 </div>
               </div>
@@ -85,10 +85,10 @@ export default function Footer() {
             <div className="footer-contact-item flex items-center gap-2">
               <div className="footer-contact-icon w-4 h-4 bg-blue-500 rounded-full flex-shrink-0"></div>
               <a
-                href="mailto:mersadkarimi0@gmail.com"
+                href="mailto:mersadkarimi001@gmail.com"
                 className="text-gray-200 hover:text-orange-300 transition-colors text-lg underline"
               >
-                mersadkarimi0@gmail.com
+                mersadkarimi001@gmail.com
               </a>
             </div>
           </div>
@@ -202,11 +202,11 @@ export default function Footer() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="footer-bottom-text text-gray-300 text-sm text-center md:text-right">
-              © ۱۴۰۳ شرکت بازرگانی مرصاد. تمامی حقوق محفوظ است.
+              © {new Date().getFullYear()} شرکت بازرگانی مرصاد. تمامی حقوق محفوظ است.
             </p>
             <div className="flex items-center gap-4 text-sm text-gray-300">
               <span className="footer-bottom-text">
-                طراحی و توسعه: mersad karimi
+                طراحی و توسعه: Mersad karimi
               </span>
             </div>
           </div>
