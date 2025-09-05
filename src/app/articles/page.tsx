@@ -2,16 +2,16 @@ import { prisma } from '@/lib/prisma'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
-interface Article {
-  id: string;
-  title: string;
-  description: string;
-  slug: string;
-  isActive: boolean;
-  order: number;
-  createdAt: string;
-  updatedAt: string;
-}
+// interface Article {
+//   id: string;
+//   title: string;
+//   description: string;
+//   slug: string;
+//   isActive: boolean;
+//   order: number;
+//   createdAt: string;
+//   updatedAt: string;
+// }
 
 export const metadata: Metadata = {
   title: 'مقالات و راهنماها - شرکت بازرگانی مرصاد',

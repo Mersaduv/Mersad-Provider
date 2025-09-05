@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+// import Link from "next/link";
+import Image from "next/image";
 import { createPortal } from "react-dom";
 
 interface SearchProduct {
@@ -343,9 +344,11 @@ export function SearchAutocomplete({
                       {/* Product Image */}
                       <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-gray-100 rounded-lg overflow-hidden">
                         {product.imageUrls && product.imageUrls.length > 0 ? (
-                          <img
+                          <Image
                             src={product.imageUrls[0]}
                             alt={product.name}
+                            width={48}
+                            height={48}
                             className="w-full h-full object-cover"
                           />
                         ) : (

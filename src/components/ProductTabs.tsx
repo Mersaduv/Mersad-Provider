@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronUp, Download } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ChevronUp } from "lucide-react";
 
 interface Product {
   id: string;

@@ -25,14 +25,14 @@ export default function CustomCKEditor({
   useEffect(() => {
     // Set RTL direction for Persian text
     if (editorRef.current?.editing?.view?.document?.getRoot()) {
-      const root = (editorRef.current as any).editing.view.document.getRoot();
+      const root = (editorRef.current as Editor).editing.view.document.getRoot();
       if (root) {
         root._setAttribute('dir', 'rtl');
       }
     }
   }, []);
 
-  const editorConfig: any = {
+  const editorConfig = {
     language: 'fa',
     direction: 'rtl',
     placeholder: placeholder,
@@ -208,7 +208,7 @@ export default function CustomCKEditor({
   return (
     <div className={`ckeditor-container ${className}`}>
              <CKEditor
-         editor={DecoupledEditor as any}
+         editor={DecoupledEditor}
          config={editorConfig}
          data={value}
          disabled={disabled}
@@ -222,7 +222,7 @@ export default function CustomCKEditor({
             });
             
             // Store editor reference
-            editorRef.current = editor as any;
+            editorRef.current = editor;
             
             // Fix list and heading behavior
             editor.editing.view.document.on('enter', (evt, data) => {
@@ -260,12 +260,12 @@ export default function CustomCKEditor({
                 
                 // If we're in a list item, ensure it's properly separated
                 if (element.name === 'listItem') {
-                  const nextElement = (position as any).getNextSibling();
+                  const nextElement = position.getNextSibling();
                   if (nextElement && nextElement.name !== 'listItem') {
                     // Insert a paragraph after the list
                     editor.model.change(writer => {
                       const paragraph = writer.createElement('paragraph');
-                      writer.insert(paragraph, (position as any).getNextSibling());
+                      writer.insert(paragraph, position.getNextSibling());
                     });
                   }
                 }
@@ -296,10 +296,10 @@ export default function CustomCKEditor({
           const data = editor.getData();
           onChange(data);
         }}
-        onBlur={(event, editor) => {
+        onBlur={() => {
           // Additional blur handling if needed
         }}
-        onFocus={(event, editor) => {
+        onFocus={() => {
           // Additional focus handling if needed
         }}
       />

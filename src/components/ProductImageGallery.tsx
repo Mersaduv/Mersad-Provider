@@ -19,7 +19,7 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
   const [useImageTest, setUseImageTest] = useState(false);
   const [showZoom, setShowZoom] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  // const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
   const imageRef = useRef<HTMLDivElement>(null);
   const zoomRef = useRef<HTMLDivElement>(null);
@@ -105,7 +105,7 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
     const percentX = (x / rect.width) * 100;
     const percentY = (y / rect.height) * 100;
 
-    setMousePosition({ x, y });
+    // setMousePosition({ x, y });
     setZoomPosition({ x: percentX, y: percentY });
     setShowZoom(true);
   };

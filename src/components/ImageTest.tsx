@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 interface ImageTestProps {
   imageUrl: string;
@@ -25,10 +26,11 @@ export function ImageTest({ imageUrl, alt }: ImageTestProps) {
 
   return (
     <div className="w-full h-full relative">
-      <img
+      <Image
         src={imageUrl}
         alt={alt}
-        className="w-full h-full object-cover"
+        fill
+        className="object-cover"
         onLoad={() => setLoaded(true)}
         onError={() => setError(true)}
       />

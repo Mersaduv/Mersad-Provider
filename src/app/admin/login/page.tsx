@@ -34,7 +34,7 @@ export default function AdminLogin() {
           setError("دسترسی رد شد. دسترسی ادمین مورد نیاز است.");
         }
       }
-    } catch (error) {
+    } catch {
       setError("خطایی رخ داد. لطفاً دوباره تلاش کنید.");
     } finally {
       setLoading(false);

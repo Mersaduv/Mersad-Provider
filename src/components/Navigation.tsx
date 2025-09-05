@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import { phoneNumber } from "@/lib/utils";
@@ -360,7 +361,7 @@ export function Navigation() {
     ) {
       fetchCategories();
     }
-  }, [isCategoriesDropdownOpen, isMobileCategoriesOpen]);
+  }, [isCategoriesDropdownOpen, isMobileCategoriesOpen, categories.length]);
 
   const fetchCategories = async () => {
     setIsLoadingCategories(true);
@@ -484,7 +485,7 @@ export function Navigation() {
               }`}
             >
               <div className="py-2">
-                <img src="/images/logo.png" alt="logo" className="w-16 h-16" />
+                <Image src="/images/logo.png" alt="logo" width={64} height={64} className="w-16 h-16" />
               </div>
               <h1> شرکت بازرگانی مرصاد</h1>
             </Link>

@@ -31,7 +31,7 @@ const Marker = dynamic(
 
 // Custom Marker Component
 const CustomMarker = ({ position, icon, children }: { position: [number, number], icon: L.DivIcon, children: React.ReactNode }) => {
-  const [MarkerComponent, setMarkerComponent] = useState<any>(null);
+  const [MarkerComponent, setMarkerComponent] = useState<React.ComponentType<any> | null>(null);
 
   useEffect(() => {
     import("react-leaflet").then((mod) => {

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import { generateSlug } from "@/lib/utils";
 
 interface Category {
@@ -372,9 +373,11 @@ export default function CategoriesManagement() {
                     <div className="mt-4">
                       <h4 className="text-sm font-medium text-gray-700 mb-3">تصویر آپلود شده:</h4>
                       <div className="relative inline-block group">
-                        <img
+                        <Image
                           src={formData.image}
                           alt="پیش‌نمایش دسته‌بندی"
+                          width={128}
+                          height={128}
                           className="w-32 h-32 object-cover rounded-md"
                         />
                         <button
@@ -489,9 +492,11 @@ export default function CategoriesManagement() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         {category.image && (
-                          <img
+                          <Image
                             src={category.image}
                             alt={category.name}
+                            width={48}
+                            height={48}
                             className="w-12 h-12 object-cover rounded-lg border"
                           />
                         )}
