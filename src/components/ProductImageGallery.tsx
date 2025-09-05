@@ -165,11 +165,13 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
 
     if (useFallback) {
       return (
-        <img
+        <Image
           src={mainImage}
           alt={`${productName} - تصویر ${selectedImage + 1}`}
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
           onError={handleImageError}
+          unoptimized={mainImage.startsWith('/uploads/')}
         />
       );
     }
@@ -200,11 +202,14 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
 
     if (useFallback) {
       return (
-        <img
+        <Image
           src={url}
           alt={`${productName} - تصویر کوچک ${index + 1}`}
+          width={80}
+          height={80}
           className="w-full h-full object-cover"
           onError={handleImageError}
+          unoptimized={url.startsWith('/uploads/')}
         />
       );
     }
@@ -234,11 +239,14 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
 
     if (useFallback) {
       return (
-        <img
+        <Image
           src={mainImage}
           alt={`${productName} - تصویر بزرگ ${selectedImage + 1}`}
+          width={1200}
+          height={900}
           className="w-full h-auto max-h-[90vh] object-contain"
           onError={handleImageError}
+          unoptimized={mainImage.startsWith('/uploads/')}
         />
       );
     }

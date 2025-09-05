@@ -15,6 +15,7 @@ export default function ParentCategorySliderDemo({
     <ParentCategoryProductSlider
       categoryId={categoryId}
       categoryName={categoryName}
+      categorySlug={categoryId} // Using categoryId as slug for demo
       title={`محصولات مرتبط با ${categoryName}`}
       description={`مجموعه‌ای از بهترین محصولات در دسته‌بندی‌های مرتبط با ${categoryName}`}
       icon={

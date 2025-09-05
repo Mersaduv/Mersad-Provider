@@ -28,7 +28,7 @@ export default function AdminLogin() {
         setError("اطلاعات ورود نامعتبر است یا کاربر ادمین نیست");
       } else {
         const session = await getSession();
-        if (session?.user?.role === "ADMIN") {
+        if ((session?.user as { role?: string })?.role === "ADMIN") {
           router.push("/admin/dashboard");
         } else {
           setError("دسترسی رد شد. دسترسی ادمین مورد نیاز است.");

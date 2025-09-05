@@ -24,14 +24,14 @@ const TileLayer = dynamic(
   { ssr: false }
 );
 
-const Marker = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Marker),
-  { ssr: false }
-);
+// const Marker = dynamic(
+//   () => import("react-leaflet").then((mod) => mod.Marker),
+//   { ssr: false }
+// );
 
 // Custom Marker Component
 const CustomMarker = ({ position, icon, children }: { position: [number, number], icon: L.DivIcon, children: React.ReactNode }) => {
-  const [MarkerComponent, setMarkerComponent] = useState<React.ComponentType<any> | null>(null);
+  const [MarkerComponent, setMarkerComponent] = useState<React.ComponentType<{ position: [number, number], icon: L.DivIcon, children: React.ReactNode }> | null>(null);
 
   useEffect(() => {
     import("react-leaflet").then((mod) => {

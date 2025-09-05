@@ -1,8 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import InteractiveMap from "@/components/InteractiveMap";
+import dynamic from "next/dynamic";
 import LocationInfo from "@/components/LocationInfo";
+
+// Dynamic import to prevent SSR issues
+const InteractiveMap = dynamic(() => import("@/components/InteractiveMap"), {
+  ssr: false,
+  loading: () => <div className="w-full h-96 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">در حال بارگذاری نقشه...</div>
+});
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({

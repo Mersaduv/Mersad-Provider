@@ -36,7 +36,7 @@ export default function ArticlesManagement() {
   useEffect(() => {
     if (status === "loading") return;
     
-    if (!session || session.user?.role !== "ADMIN") {
+    if (!session || (session.user as { role?: string })?.role !== "ADMIN") {
       router.push("/admin/login");
       return;
     }
@@ -84,7 +84,7 @@ export default function ArticlesManagement() {
     );
   }
 
-  if (!session || session.user?.role !== "ADMIN") {
+  if (!session || (session.user as { role?: string })?.role !== "ADMIN") {
     return null;
   }
 

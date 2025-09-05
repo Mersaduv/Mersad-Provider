@@ -80,7 +80,7 @@ export default function CustomCKEditor({
     },
     heading: {
       options: [
-        { model: 'paragraph', title: 'پاراگراف', class: 'ck-heading_paragraph' },
+        { model: 'paragraph' as const, title: 'پاراگراف', class: 'ck-heading_paragraph' },
         { model: 'heading1' as const, view: 'h1', title: 'عنوان 1', class: 'ck-heading_heading1' },
         { model: 'heading2' as const, view: 'h2', title: 'عنوان 2', class: 'ck-heading_heading2' },
         { model: 'heading3' as const, view: 'h3', title: 'عنوان 3', class: 'ck-heading_heading3' },
@@ -208,7 +208,7 @@ export default function CustomCKEditor({
   return (
     <div className={`ckeditor-container ${className}`}>
              <CKEditor
-         editor={DecoupledEditor}
+         editor={DecoupledEditor as any} // eslint-disable-line @typescript-eslint/no-explicit-any
          config={editorConfig}
          data={value}
          disabled={disabled}
@@ -222,7 +222,7 @@ export default function CustomCKEditor({
             });
             
             // Store editor reference
-            editorRef.current = editor;
+            editorRef.current = editor as any; // eslint-disable-line @typescript-eslint/no-explicit-any
             
             // Fix list and heading behavior
             editor.editing.view.document.on('enter', (evt, data) => {
@@ -260,12 +260,12 @@ export default function CustomCKEditor({
                 
                 // If we're in a list item, ensure it's properly separated
                 if (element.name === 'listItem') {
-                  const nextElement = position.getNextSibling();
+                  const nextElement = (position as any).getNextSibling(); // eslint-disable-line @typescript-eslint/no-explicit-any
                   if (nextElement && nextElement.name !== 'listItem') {
                     // Insert a paragraph after the list
                     editor.model.change(writer => {
                       const paragraph = writer.createElement('paragraph');
-                      writer.insert(paragraph, position.getNextSibling());
+                      writer.insert(paragraph, (position as any).getNextSibling()); // eslint-disable-line @typescript-eslint/no-explicit-any
                     });
                   }
                 }
