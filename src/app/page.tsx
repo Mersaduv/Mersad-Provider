@@ -8,18 +8,18 @@ import AboutSection from "@/components/AboutSection";
 export const metadata: Metadata = {
   title: "خانه - شرکت بازرگانی مرصاد",
   description:
-    "به پروژه Next.js + Prisma + Vercel Postgres خوش آمدید. این یک پروژه نمونه با پشتیبانی از زبان فارسی و چینش راست به چپ است.",
-  keywords: ["Next.js", "Prisma", "Vercel Postgres", "فارسی", "پروژه نمونه"],
+    ".",
+  keywords: ["بازرگانی", "شرکت تتمین کننده", "فارسی", "محصولات"],
   openGraph: {
     title: "خانه - شرکت بازرگانی مرصاد",
-    description: "به پروژه Next.js + Prisma + Vercel Postgres خوش آمدید",
+    description: "",
     type: "website",
     locale: "fa_IR",
   },
   twitter: {
     card: "summary_large_image",
     title: "خانه - شرکت بازرگانی مرصاد",
-    description: "به پروژه Next.js + Prisma + Vercel Postgres خوش آمدید",
+    description: "",
   },
 };
 
