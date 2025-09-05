@@ -14,6 +14,15 @@ const nextConfig: NextConfig = {
     ],
     unoptimized: true, // For uploaded images
   },
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client'],
+  },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push('@prisma/client');
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
