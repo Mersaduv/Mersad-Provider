@@ -1,17 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
-
-interface Article {
-  id: string;
-  title: string;
-  description: string;
-  slug: string;
-  isActive: boolean;
-  order: number;
-  createdAt: string;
-  updatedAt: string;
-}
+import Link from 'next/link'
 
 interface ArticlePageProps {
   params: {
@@ -91,7 +81,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
           {/* Back Button */}
           <div className="mt-8 text-center">
-            <a
+            <Link
               href="/"
               className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
             >
@@ -101,7 +91,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 </svg>
               </div>
               بازگشت به صفحه اصلی
-            </a>
+            </Link>
           </div>
         </div>
       </div>
