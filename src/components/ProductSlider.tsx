@@ -340,9 +340,10 @@ export default function ProductSlider({
                     : product.category.name;
 
                   return (
-                    <div
+                    <Link
                       key={product.id}
-                      className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group relative flex-shrink-0 w-56 sm:w-64 lg:w-72"
+                      href={`/products/${product.slug}`}
+                      className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group relative flex-shrink-0 w-56 sm:w-64 lg:w-72 cursor-pointer hover:scale-105"
                     >
                       {/* Product Image */}
                       <div className="relative h-48 w-full bg-gray-50 overflow-hidden">
@@ -400,7 +401,7 @@ export default function ProductSlider({
                           {product.name}
                         </h3>
                       </div>
-                    </div>
+                    </Link>
                   );
                 })}
               </div>

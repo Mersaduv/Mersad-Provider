@@ -107,7 +107,7 @@ async function seedSampleData() {
         description: '<p>گوشی هوشمند سامسونگ گلکسی S24 با پردازنده قدرتمند Snapdragon 8 Gen 3، دوربین 200 مگاپیکسلی و صفحه نمایش 6.2 اینچی Dynamic AMOLED 2X</p>',
         categoryId: smartphoneCategory.id,
         bestSelling: true,
-        imageUrls: []
+        imageUrls: ""
       },
       {
         name: 'آیفون 15 پرو',
@@ -115,7 +115,7 @@ async function seedSampleData() {
         description: '<p>آیفون 15 پرو با تراشه A17 Pro، دوربین 48 مگاپیکسلی، صفحه نمایش 6.1 اینچی Super Retina XDR و طراحی تیتانیومی</p>',
         categoryId: smartphoneCategory.id,
         bestSelling: true,
-        imageUrls: []
+        imageUrls: ""
       },
       {
         name: 'گوشی هوشمند شیائومی 14',
@@ -123,7 +123,7 @@ async function seedSampleData() {
         description: '<p>گوشی هوشمند شیائومی 14 با تراشه Snapdragon 8 Gen 3، دوربین 50 مگاپیکسلی Leica و صفحه نمایش 6.36 اینچی LTPO OLED</p>',
         categoryId: smartphoneCategory.id,
         bestSelling: false,
-        imageUrls: []
+        imageUrls: ""
       },
       {
         name: 'لپ‌تاپ مک‌بوک پرو M3',
@@ -131,7 +131,7 @@ async function seedSampleData() {
         description: '<p>لپ‌تاپ مک‌بوک پرو با تراشه M3، صفحه نمایش 14 اینچی Liquid Retina XDR، حافظه 8GB و ذخیره‌سازی 512GB SSD</p>',
         categoryId: laptopCategory.id,
         bestSelling: true,
-        imageUrls: []
+        imageUrls: ""
       },
       {
         name: 'لپ‌تاپ دل XPS 13',
@@ -139,7 +139,7 @@ async function seedSampleData() {
         description: '<p>لپ‌تاپ دل XPS 13 با پردازنده Intel Core i7، صفحه نمایش 13.4 اینچی 4K، حافظه 16GB و ذخیره‌سازی 512GB SSD</p>',
         categoryId: laptopCategory.id,
         bestSelling: false,
-        imageUrls: []
+        imageUrls: ""
       },
       {
         name: 'لپ‌تاپ لنوو ThinkPad X1',
@@ -147,7 +147,7 @@ async function seedSampleData() {
         description: '<p>لپ‌تاپ لنوو ThinkPad X1 Carbon با پردازنده Intel Core i7، صفحه نمایش 14 اینچی WUXGA، حافظه 16GB و ذخیره‌سازی 1TB SSD</p>',
         categoryId: laptopCategory.id,
         bestSelling: false,
-        imageUrls: []
+        imageUrls: ""
       },
       {
         name: 'جاروبرقی هوشمند دایسون V15',
@@ -155,7 +155,7 @@ async function seedSampleData() {
         description: '<p>جاروبرقی بی‌سیم دایسون V15 با موتور دیجیتال V15، باتری 60 دقیقه‌ای و فیلتر HEPA کامل</p>',
         categoryId: homeCategory.id,
         bestSelling: true,
-        imageUrls: []
+        imageUrls: ""
       },
       {
         name: 'مایکروویو سامسونگ 32 لیتری',
@@ -163,7 +163,7 @@ async function seedSampleData() {
         description: '<p>مایکروویو سامسونگ با ظرفیت 32 لیتر، قدرت 1000 وات، 10 سطح قدرت و تایمر دیجیتال</p>',
         categoryId: homeCategory.id,
         bestSelling: false,
-        imageUrls: []
+        imageUrls: ""
       }
     ];
     

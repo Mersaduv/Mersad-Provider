@@ -9,7 +9,7 @@ import Image from "next/image";
 
 interface Slider {
   id: string;
-  title: string;
+  title?: string;
   link?: string;
   imageUrl: string;
   order: number;
@@ -103,7 +103,7 @@ export default function SlidersManagement() {
   const handleEdit = (slider: Slider) => {
     setEditingSlider(slider);
     setFormData({
-      title: slider.title,
+      title: slider.title || "",
       link: slider.link || "",
       imageUrl: slider.imageUrl,
       order: slider.order,
@@ -246,14 +246,13 @@ export default function SlidersManagement() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  عنوان
+                  عنوان (اختیاری)
                 </label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
                 />
               </div>
               <div>
@@ -395,7 +394,7 @@ export default function SlidersManagement() {
               <Button 
                 type="submit" 
                 className="bg-blue-600 hover:bg-blue-700"
-                disabled={!formData.title || !formData.imageUrl || uploading || submitting}
+                disabled={!formData.imageUrl || uploading || submitting}
               >
                 {submitting ? (
                   <div className="flex items-center gap-4">
@@ -459,14 +458,14 @@ export default function SlidersManagement() {
                     <div className="h-16 w-24 relative">
                       <Image
                         src={slider.imageUrl}
-                        alt={slider.title}
+                        alt={slider.title || "Slider"}
                         fill
                         className="object-cover rounded"
                       />
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {slider.title}
+                    {slider.title || "بدون عنوان"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {slider.link ? (

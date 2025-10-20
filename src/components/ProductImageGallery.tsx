@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { ZoomIn, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { ImageTest } from "./ImageTest";
 
 interface ProductImageGalleryProps {
-  imageUrls: string[];
+  imageUrls: string;
   productName: string;
 }
 
@@ -24,12 +24,18 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
   const imageRef = useRef<HTMLDivElement>(null);
   const zoomRef = useRef<HTMLDivElement>(null);
 
+  // Convert single string to array for compatibility
+  const imageArray = useMemo(() => {
+    return imageUrls ? (imageUrls.includes(',') ? imageUrls.split(',') : [imageUrls]) : [];
+  }, [imageUrls]);
+
   // Debug logging
   useEffect(() => {
     console.log('ProductImageGallery - imageUrls:', imageUrls);
+    console.log('ProductImageGallery - imageArray:', imageArray);
     console.log('ProductImageGallery - selectedImage:', selectedImage);
-    console.log('ProductImageGallery - mainImage:', imageUrls[selectedImage]);
-  }, [imageUrls, selectedImage]);
+    console.log('ProductImageGallery - mainImage:', imageArray[selectedImage]);
+  }, [imageUrls, imageArray, selectedImage]);
 
   // Keyboard navigation for full-screen mode
   useEffect(() => {
@@ -42,11 +48,11 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
           break;
         case 'ArrowLeft':
           e.preventDefault();
-          setSelectedImage(prev => prev > 0 ? prev - 1 : imageUrls.length - 1);
+          setSelectedImage(prev => prev > 0 ? prev - 1 : imageArray.length - 1);
           break;
         case 'ArrowRight':
           e.preventDefault();
-          setSelectedImage(prev => prev < imageUrls.length - 1 ? prev + 1 : 0);
+          setSelectedImage(prev => prev < imageArray.length - 1 ? prev + 1 : 0);
           break;
       }
     };
@@ -61,9 +67,9 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
-  }, [isZoomed, imageUrls.length]);
+  }, [isZoomed, imageArray.length]);
 
-  if (!imageUrls || imageUrls.length === 0) {
+  if (!imageArray || imageArray.length === 0) {
     return (
       <div className="w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
         <div className="text-gray-500 text-center">
@@ -74,7 +80,7 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
     );
   }
 
-  const mainImage = imageUrls[selectedImage];
+  const mainImage = imageArray[selectedImage];
 
   const handleImageError = () => {
     console.log('Image error occurred for:', mainImage);
@@ -115,11 +121,11 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
   };
 
   const handlePreviousImage = () => {
-    setSelectedImage(prev => prev > 0 ? prev - 1 : imageUrls.length - 1);
+    setSelectedImage(prev => prev > 0 ? prev - 1 : imageArray.length - 1);
   };
 
   const handleNextImage = () => {
-    setSelectedImage(prev => prev < imageUrls.length - 1 ? prev + 1 : 0);
+    setSelectedImage(prev => prev < imageArray.length - 1 ? prev + 1 : 0);
   };
 
   if (imageError) {
@@ -286,7 +292,7 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
 
           {/* Image Counter */}
           <div className="absolute top-3 left-3 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded-full">
-            {selectedImage + 1} / {imageUrls.length}
+            {selectedImage + 1} / {imageArray.length}
           </div>
         </div>
 
@@ -306,9 +312,9 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
       </div>
 
       {/* Thumbnail Gallery */}
-      {imageUrls.length > 1 && (
+      {imageArray.length > 1 && (
         <div className="flex gap-2 overflow-x-auto pb-2">
-          {imageUrls.map((url, index) => (
+          {imageArray.map((url, index) => (
             <button
               key={index}
               onClick={() => {
@@ -345,7 +351,7 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
              </button>
 
              {/* Previous Button */}
-             {imageUrls.length > 1 && (
+             {imageArray.length > 1 && (
                <button
                  onClick={handlePreviousImage}
                  className="absolute left-6 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-3 transition-all duration-200 backdrop-blur-sm"
@@ -357,7 +363,7 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
              )}
 
              {/* Next Button */}
-             {imageUrls.length > 1 && (
+             {imageArray.length > 1 && (
                <button
                  onClick={handleNextImage}
                  className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-3 transition-all duration-200 backdrop-blur-sm"
@@ -378,16 +384,16 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
                className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-4 py-2 rounded-full backdrop-blur-sm"
                style={{ zIndex: 1000000 }}
              >
-               {selectedImage + 1} / {imageUrls.length}
+               {selectedImage + 1} / {imageArray.length}
              </div>
 
              {/* Navigation Dots */}
-             {imageUrls.length > 1 && (
+             {imageArray.length > 1 && (
                <div 
                  className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex justify-center gap-2"
                  style={{ zIndex: 1000000 }}
                >
-                 {imageUrls.map((_, index) => (
+                 {imageArray.map((_, index) => (
                    <button
                      key={index}
                      onClick={() => setSelectedImage(index)}

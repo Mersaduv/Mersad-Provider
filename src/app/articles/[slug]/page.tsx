@@ -4,15 +4,16 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 interface ArticlePageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+  const { slug } = await params;
   const article = await prisma.article.findUnique({
     where: { 
-      slug: params.slug,
+      slug: slug,
       isActive: true 
     }
   });
@@ -36,9 +37,10 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
+  const { slug } = await params;
   const article = await prisma.article.findUnique({
     where: { 
-      slug: params.slug,
+      slug: slug,
       isActive: true 
     }
   });

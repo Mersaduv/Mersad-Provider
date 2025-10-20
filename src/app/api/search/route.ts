@@ -17,13 +17,11 @@ export async function GET(request: NextRequest) {
           {
             name: {
               contains: query,
-              mode: 'insensitive' as const, // For case-insensitive search
             },
           },
           {
             description: {
               contains: query,
-              mode: 'insensitive' as const,
             },
           },
         ],

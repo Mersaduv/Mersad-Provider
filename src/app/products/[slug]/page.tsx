@@ -4,17 +4,17 @@ import { ProductImageGallery } from "@/components/ProductImageGallery";
 import { ProductSiteItems } from "@/components/ProductSiteItems";
 import { ProductTabs } from "@/components/ProductTabs";
 import ParentCategoryProductSlider from "@/components/ParentCategoryProductSlider";
-
-import PhoneButton from "@/components/PhoneButton";
+import { OrderButton } from "@/components/OrderButton";
 import { Metadata } from "next";
 import Link from "next/link";
 
 export const revalidate = 3600; // Revalidate every hour
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const { slug } = await params;
   const product = await prisma.product.findUnique({
     where: {
-      slug: params.slug,
+      slug: slug,
     },
     include: {
       category: true,
@@ -61,15 +61,16 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
+  const { slug } = await params;
   const product = await prisma.product.findUnique({
     where: {
-      slug: params.slug,
+      slug: slug,
     },
     include: {
       category: {
@@ -203,7 +204,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </div>
               <hr className="my-10" />
               <div className="">
-                <PhoneButton
+                <OrderButton
+                  productId={product.id}
+                  productName={product.name}
                 />
               </div>
             </div>

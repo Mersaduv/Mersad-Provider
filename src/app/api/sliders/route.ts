@@ -22,9 +22,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { title, link, imageUrl, order } = body;
 
-    if (!title || !imageUrl) {
+    if (!imageUrl) {
       return NextResponse.json(
-        { error: "Title and imageUrl are required" },
+        { error: "ImageUrl is required" },
         { status: 400 }
       );
     }

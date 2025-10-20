@@ -8,7 +8,7 @@ import { Metadata } from "next";
 export const revalidate = 3600; // Revalidate every hour
 
 export async function generateMetadata({ searchParams }: ProductsPageProps): Promise<Metadata> {
-  const { category, search, sort } = searchParams;
+  const { category, search, sort } = await searchParams;
   
   let title = "محصولات - سامانه ارائه دهنده";
   let description = "مشاهده تمام محصولات موجود در سامانه ارائه دهنده";
@@ -69,18 +69,18 @@ export async function generateMetadata({ searchParams }: ProductsPageProps): Pro
 }
 
 interface ProductsPageProps {
-  searchParams: {
+  searchParams: Promise<{
     category?: string;
     page?: string;
     search?: string;
     sort?: string;
-  };
+  }>;
 }
 
 const ITEMS_PER_PAGE = 1; // Number of products per page
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
-  const { category, page = "1", search, sort } = searchParams;
+  const { category, page = "1", search, sort } = await searchParams;
   const currentPage = parseInt(page, 10) || 1;
 
   // Build the where clause for filtering

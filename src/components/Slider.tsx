@@ -85,7 +85,7 @@ export default function Slider() {
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                   priority
                 />
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
+                {/* <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div> */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center text-white px-4">
                     <h2 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg">
@@ -103,7 +103,7 @@ export default function Slider() {
                   className="object-cover"
                   priority
                 />
-                <div className="absolute inset-0 bg-black/30"></div>
+                {/* <div className="absolute inset-0 bg-black/30"></div> */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center text-white px-4">
                     <h2 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg">

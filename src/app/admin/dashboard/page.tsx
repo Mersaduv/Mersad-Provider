@@ -77,6 +77,12 @@ export default function AdminDashboard() {
                     مدیریت مقالات
                   </Button>
                 </Link>
+
+                <Link href="/admin/dashboard/orders">
+                  <Button className="w-full h-24 text-lg bg-red-600 hover:bg-red-700">
+                    مدیریت سفارشات
+                  </Button>
+                </Link>
               </div>
               
               <div className="mt-8">

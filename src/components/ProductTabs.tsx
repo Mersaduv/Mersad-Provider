@@ -8,7 +8,7 @@ interface Product {
   name: string;
   slug: string;
   description: string;
-  imageUrls: string[];
+  imageUrls: string;
   categoryId: string;
   category: {
     id: string;

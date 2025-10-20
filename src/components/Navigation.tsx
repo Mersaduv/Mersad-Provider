@@ -468,7 +468,7 @@ export function Navigation() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out nav-height-transition ${
+      className={`fixed top-0 left-0 right-0 z-10 transition-all duration-300 ease-in-out nav-height-transition ${
         isScrolled
           ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200"
           : "bg-white shadow-sm"
@@ -555,6 +555,14 @@ export function Navigation() {
                   className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
                 >
                   تماس با ما
+                </Button>
+              </Link>
+              <Link href="/profile">
+                <Button
+                  variant="ghost"
+                  className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                >
+                  پروفایل من
                 </Button>
               </Link>
             </div>
@@ -702,6 +710,14 @@ export function Navigation() {
                 className="w-full text-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
               >
                 تماس با ما
+              </Button>
+            </Link>
+            <Link href="/profile">
+              <Button
+                variant="ghost"
+                className="w-full text-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+              >
+                پروفایل من
               </Button>
             </Link>
 
