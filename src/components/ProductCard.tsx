@@ -6,7 +6,7 @@ interface ProductCardProps {
   slug: string;
   name: string;
   description: string;
-  imageUrls: string;
+  imageUrls: string[] | string;
   category: {
     id: string;
     name: string;
@@ -31,7 +31,9 @@ export function ProductCard({
   bestSelling = false,
   createdAt,
 }: ProductCardProps) {
-  const imageUrl = imageUrls || undefined;
+  const imageUrl = Array.isArray(imageUrls) 
+    ? (imageUrls.length > 0 ? imageUrls[0] : undefined)
+    : imageUrls || undefined;
 
   // Create breadcrumb path
   const breadcrumbPath = category.parent 
@@ -118,7 +120,7 @@ export function ProductCard({
                   <svg className="w-3 h-3 ml-1" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
                   </svg>
-                  <span>1</span>
+                  <span>{Array.isArray(imageUrls) ? imageUrls.length : 1}</span>
                 </div>
               )}
               {createdAt && (

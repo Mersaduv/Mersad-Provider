@@ -7,7 +7,7 @@ import { ZoomIn, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { ImageTest } from "./ImageTest";
 
 interface ProductImageGalleryProps {
-  imageUrls: string;
+  imageUrls: string[] | string;
   productName: string;
 }
 
@@ -24,9 +24,14 @@ export function ProductImageGallery({ imageUrls, productName }: ProductImageGall
   const imageRef = useRef<HTMLDivElement>(null);
   const zoomRef = useRef<HTMLDivElement>(null);
 
-  // Convert single string to array for compatibility
+  // Convert to array if needed
   const imageArray = useMemo(() => {
-    return imageUrls ? (imageUrls.includes(',') ? imageUrls.split(',') : [imageUrls]) : [];
+    if (Array.isArray(imageUrls)) {
+      return imageUrls;
+    } else if (typeof imageUrls === 'string') {
+      return imageUrls ? (imageUrls.includes(',') ? imageUrls.split(',') : [imageUrls]) : [];
+    }
+    return [];
   }, [imageUrls]);
 
   // Debug logging
