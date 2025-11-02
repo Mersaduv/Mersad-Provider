@@ -19,6 +19,16 @@ export default function AdminDashboard() {
   }, [session, status, router]);
 
   const handleSignOut = async () => {
+    // Close mobile menu if open
+    window.dispatchEvent(new CustomEvent("closeMobileMenu"));
+    
+    // Reset scroll to top
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant" as ScrollBehavior,
+    });
+    
     await signOut({ callbackUrl: "/admin/login" });
   };
 

@@ -83,6 +83,16 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     try {
+      // Close mobile menu if open
+      window.dispatchEvent(new CustomEvent("closeMobileMenu"));
+      
+      // Reset scroll to top
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant" as ScrollBehavior,
+      });
+      
       await signOut({ redirect: false });
       router.push('/');
     } catch (error) {

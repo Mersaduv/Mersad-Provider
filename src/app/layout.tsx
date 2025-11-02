@@ -4,6 +4,7 @@ import { Navigation } from "@/components/Navigation";
 import { Providers } from "@/components/Providers";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ScrollProgress } from "@/components/ScrollProgress";
+import { ScrollToTopOnRouteChange } from "@/components/ScrollToTopOnRouteChange";
 import Footer from "@/components/Footer";
 import "./globals.css";
 import { DynamicLayout } from "@/components/DynamicLayout";
@@ -70,6 +71,7 @@ export default function RootLayout({
       >
         <Providers>
           <ScrollProgress />
+          <ScrollToTopOnRouteChange />
           <Navigation />
           <DynamicLayout>
             {children}

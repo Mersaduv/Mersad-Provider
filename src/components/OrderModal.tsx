@@ -591,7 +591,7 @@ export function OrderModal({
                 }}
                 maxLength={11}
                 className="w-full px-4 py-3 text-center border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="09xxxxxxxxx یا 07xxxxxxxx"
+                placeholder="تلفن همراه جهت تکمیل سفارش"
               />
             </div>
 

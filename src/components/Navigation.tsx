@@ -8,7 +8,7 @@ import { phoneNumber } from "@/lib/utils";
 import { SearchAutocomplete } from "./SearchAutocomplete";
 import { useSession, signIn } from "next-auth/react";
 import { useOrderModal } from "@/contexts/OrderModalContext";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 // Custom hook to track navigation height changes
 function useNavigationHeight() {
@@ -348,6 +348,7 @@ export function Navigation() {
   const { data: session } = useSession();
   const { isModalOpen } = useOrderModal();
   const router = useRouter();
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSecondSectionVisible, setIsSecondSectionVisible] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -365,6 +366,34 @@ export function Navigation() {
 
   // Use the custom hook
   useNavigationHeight();
+
+  // Close mobile menu and reset scroll when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsMobileCategoriesOpen(false);
+    setExpandedCategories(new Set());
+    
+    // Reset scroll to top
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant" as ScrollBehavior,
+    });
+  }, [pathname]);
+
+  // Listen for custom event to close mobile menu
+  useEffect(() => {
+    const handleCloseMobileMenu = () => {
+      setIsMobileMenuOpen(false);
+      setIsMobileCategoriesOpen(false);
+      setExpandedCategories(new Set());
+    };
+
+    window.addEventListener("closeMobileMenu", handleCloseMobileMenu);
+    return () => {
+      window.removeEventListener("closeMobileMenu", handleCloseMobileMenu);
+    };
+  }, []);
 
   // Fetch categories when dropdown is opened
   useEffect(() => {

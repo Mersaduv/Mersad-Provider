@@ -39,7 +39,7 @@ export default function Footer() {
                   هرات,جاده عیدگاه دفتر کیمیاگر فارما
                 </p>
                 <div className="footer-contact-item flex items-center gap-2">
-                  <div className="footer-contact-icon w-4 h-4 bg-pink-400 rounded-full flex-shrink-0"></div>
+                  <div className="footer-contact-icon w-4 h-4 bg-blue-400 rounded-full flex-shrink-0"></div>
                   <a
                     href="tel:0702185538"
                     className="text-gray-200 hover:text-orange-300 transition-colors text-lg underline"
@@ -61,7 +61,7 @@ export default function Footer() {
                  .
                 </p> */}
                 {/* <div className="footer-contact-item flex items-center gap-2">
-                  <div className="footer-contact-icon w-4 h-4 bg-pink-400 rounded-full flex-shrink-0"></div>
+                  <div className="footer-contact-icon w-4 h-4 bg-blue-400 rounded-full flex-shrink-0"></div>
                   <a
                     href="tel:0564710400"
                     className="text-gray-200 hover:text-orange-300 transition-colors text-lg underline"
@@ -70,7 +70,7 @@ export default function Footer() {
                   </a>
                 </div> */}
                 <div className="footer-contact-item flex items-center gap-2">
-                  <div className="footer-contact-icon w-4 h-4 bg-pink-400 rounded-full flex-shrink-0"></div>
+                  <div className="footer-contact-icon w-4 h-4 bg-blue-400 rounded-full flex-shrink-0"></div>
                   <a
                     href="tel:0702185538"
                     className="text-gray-200 hover:text-orange-300 transition-colors text-lg underline"
