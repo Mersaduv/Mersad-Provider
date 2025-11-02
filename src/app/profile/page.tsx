@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -40,17 +40,15 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (status === "authenticated" && session?.user?.id) {
-      fetchOrders();
-    } else {
+  const fetchOrders = useCallback(async () => {
+    const userId = (session?.user as { id?: string })?.id;
+    if (!userId) {
       setLoading(false);
+      return;
     }
-  }, [status, session]);
 
-  const fetchOrders = async () => {
     try {
-      const response = await fetch(`/api/orders?userId=${session?.user?.id}`);
+      const response = await fetch(`/api/orders?userId=${userId}`);
       const data = await response.json();
       
       if (response.ok) {
@@ -64,7 +62,16 @@ export default function ProfilePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [session]);
+
+  useEffect(() => {
+    const userId = (session?.user as { id?: string })?.id;
+    if (status === "authenticated" && userId) {
+      fetchOrders();
+    } else {
+      setLoading(false);
+    }
+  }, [status, session, fetchOrders]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('fa-IR').format(price);

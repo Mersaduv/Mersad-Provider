@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { signIn } from "next-auth/react";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
@@ -49,10 +47,11 @@ export async function POST(request: NextRequest) {
       }
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Phone login error:", error);
+    const errorMessage = error instanceof Error ? error.message : "خطا در ورود";
     return NextResponse.json(
-      { error: "خطا در ورود" },
+      { error: errorMessage },
       { status: 500 }
     );
   }

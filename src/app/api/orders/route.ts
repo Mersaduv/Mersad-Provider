@@ -66,9 +66,9 @@ export async function POST(request: NextRequest) {
               role: 'USER'
             }
           });
-        } catch (createError: any) {
+        } catch (createError: unknown) {
           // If creation fails due to email conflict, try to find again
-          if (createError.code === 'P2002') {
+          if (createError && typeof createError === 'object' && 'code' in createError && createError.code === 'P2002') {
             user = await prisma.user.findFirst({
               where: { phone: customerPhone }
             });
@@ -120,18 +120,23 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error creating order:", error);
-    console.error("Error details:", {
-      message: error?.message,
-      code: error?.code,
-      meta: error?.meta
-    });
     
-    // Return more detailed error for debugging
-    const errorMessage = error?.meta?.target 
-      ? `خطا در ثبت سفارش: ${error.message}` 
-      : "خطا در ثبت سفارش";
+    let errorMessage = "خطا در ثبت سفارش";
+    if (error && typeof error === 'object') {
+      const errorObj = error as { message?: string; code?: string; meta?: { target?: unknown } };
+      console.error("Error details:", {
+        message: errorObj.message,
+        code: errorObj.code,
+        meta: errorObj.meta
+      });
+      
+      // Return more detailed error for debugging
+      if (errorObj.meta?.target) {
+        errorMessage = `خطا در ثبت سفارش: ${errorObj.message || 'Unknown error'}`;
+      }
+    }
     
     return NextResponse.json(
       { error: errorMessage },
