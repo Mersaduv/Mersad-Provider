@@ -99,10 +99,13 @@ model User {
   name      String
   email     String   @unique
   password  String
+  phone     String?
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   orders    Order[]
+  
+  @@index([phone])
 }
 
 model Order {

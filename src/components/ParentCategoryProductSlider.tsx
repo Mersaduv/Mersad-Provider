@@ -330,6 +330,7 @@ export default function ParentCategoryProductSlider({
                     <Link
                       key={product.id}
                       href={`/products/${product.slug}`}
+                      prefetch={true}
                       className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group relative flex-shrink-0 w-56 sm:w-64 lg:w-72 hover:scale-105"
                     >
                       {/* Product Image */}

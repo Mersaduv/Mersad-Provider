@@ -287,8 +287,12 @@ export default function AdminOrdersPage() {
                           <span className="mr-2">{order.quantity}</span>
                         </div>
                         <div>
-                          <span className="font-medium">قیمت دلخواه:</span>
-                          <span className="mr-2">{formatPrice(order.desiredPrice)} تومان</span>
+                          <span className="font-medium">قیمت کل دلخواه:</span>
+                          <span className="mr-2">{formatPrice(order.desiredPrice)} AFN</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">قیمت هر عدد:</span>
+                          <span className="mr-2">{formatPrice(order.desiredPrice / order.quantity)} AFN</span>
                         </div>
                         <div>
                           <span className="font-medium">تاریخ سفارش:</span>

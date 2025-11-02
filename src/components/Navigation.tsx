@@ -6,6 +6,9 @@ import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import { phoneNumber } from "@/lib/utils";
 import { SearchAutocomplete } from "./SearchAutocomplete";
+import { useSession, signIn } from "next-auth/react";
+import { useOrderModal } from "@/contexts/OrderModalContext";
+import { useRouter } from "next/navigation";
 
 // Custom hook to track navigation height changes
 function useNavigationHeight() {
@@ -164,15 +167,15 @@ function CategoryTreeItem({
                 <div className="w-3 h-3"></div>
               )}
             </div>
-            
+
             {/* Category name - clickable */}
-            <span 
+            <span
               className="flex-1 text-right font-medium cursor-pointer"
               onClick={handleCategoryNameClick}
             >
               {category.name}
             </span>
-            
+
             {/* Blue arrow for navigation */}
             <div className="w-6 h-6 flex items-center justify-center rotate-180">
               <svg
@@ -235,8 +238,10 @@ function CategoryTreeItem({
                 </svg>
               )}
             </div>
-            
-            <span className="flex-1 text-right font-medium">{category.name}</span>
+
+            <span className="flex-1 text-right font-medium">
+              {category.name}
+            </span>
           </div>
         )}
       </div>
@@ -340,6 +345,9 @@ function buildCategoryTree(categories: Category[]): Category[] {
 }
 
 export function Navigation() {
+  const { data: session } = useSession();
+  const { isModalOpen } = useOrderModal();
+  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSecondSectionVisible, setIsSecondSectionVisible] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -348,7 +356,12 @@ export function Navigation() {
   const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(false);
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
+    new Set()
+  );
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [phoneNumberLogin, setPhoneNumberLogin] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Use the custom hook
   useNavigationHeight();
@@ -443,12 +456,12 @@ export function Navigation() {
     setIsMobileCategoriesOpen(false);
     // Clear expanded categories when navigating
     setExpandedCategories(new Set());
-    // Navigate to products page with category filter
-    window.location.href = `/products?category=${categorySlug}`;
+    // Navigate to products page with category filter using Next.js router
+    router.push(`/products?category=${categorySlug}`);
   };
 
   const toggleCategoryExpansion = (categoryId: string) => {
-    setExpandedCategories(prev => {
+    setExpandedCategories((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(categoryId)) {
         newSet.delete(categoryId);
@@ -460,15 +473,50 @@ export function Navigation() {
   };
 
   const handleCategoryHover = (categoryId: string) => {
-    setExpandedCategories(prev => new Set(prev).add(categoryId));
+    setExpandedCategories((prev) => new Set(prev).add(categoryId));
   };
 
   // Build category tree
   const categoryTree = buildCategoryTree(categories);
 
+  // Handle phone login
+  const handlePhoneLogin = async () => {
+    setIsLoggingIn(true);
+    try {
+      const result = await signIn("phone", {
+        phone: phoneNumberLogin,
+        redirect: false,
+      });
+
+      if (result?.ok) {
+        setShowLoginModal(false);
+        setPhoneNumberLogin("");
+        // Navigate to profile using Next.js router
+        router.push("/profile");
+      } else {
+        alert("شماره تلفن اشتباه است یا سفارشی ثبت نکرده‌اید");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("خطا در ورود. لطفاً دوباره تلاش کنید.");
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
+
+  // Handle order button click
+  const handleOrderClick = (e: React.MouseEvent) => {
+    if (!session) {
+      e.preventDefault();
+      setShowLoginModal(true);
+    }
+  };
+
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-10 transition-all duration-300 ease-in-out nav-height-transition ${
+      className={`fixed top-0 left-0 right-0 transition-all duration-300 ease-in-out nav-height-transition ${
+        isModalOpen ? "z-[0]" : "z-[999]"
+      } ${
         isScrolled
           ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200"
           : "bg-white shadow-sm"
@@ -480,19 +528,26 @@ export function Navigation() {
           <div className="flex items-center">
             <Link
               href="/"
+              prefetch={true}
               className={`font-bold flex items-center gap-2 text-2xl text-gray-800 hover:text-indigo-600 transition-all duration-300 ${
                 isScrolled ? "scale-105" : "scale-100"
               }`}
             >
               <div className="py-2">
-                <Image src="/images/logo.png" alt="logo" width={64} height={64} className="w-16 h-16" />
+                <Image
+                  src="/images/logo.png"
+                  alt="logo"
+                  width={64}
+                  height={64}
+                  className="w-16 h-16"
+                />
               </div>
               <h1> شرکت بازرگانی مرصاد</h1>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden mdx:flex items-center space-x-4 space-x-reverse">
-              <Link href="/products">
+            <div className="hidden lg:flex items-center space-x-4 space-x-reverse">
+              <Link href="/products" prefetch={true}>
                 <Button
                   variant="ghost"
                   className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
@@ -541,7 +596,7 @@ export function Navigation() {
                 )}
               </div>
 
-              <Link href="/about">
+              <Link href="/about" prefetch={true}>
                 <Button
                   variant="ghost"
                   className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
@@ -549,7 +604,7 @@ export function Navigation() {
                   درباره ما
                 </Button>
               </Link>
-              <Link href="/contact">
+              <Link href="/contact" prefetch={true}>
                 <Button
                   variant="ghost"
                   className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
@@ -557,20 +612,52 @@ export function Navigation() {
                   تماس با ما
                 </Button>
               </Link>
-              <Link href="/profile">
+              {session ? (
+                <Link href="/profile" prefetch={true}>
+                  <Button className="bg-gradient-to-r whitespace-nowrap from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                      />
+                    </svg>
+                    سفارش های من
+                  </Button>
+                </Link>
+              ) : (
                 <Button
-                  variant="ghost"
-                  className="hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                  onClick={handleOrderClick}
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
                 >
-                  پروفایل من
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                    />
+                  </svg>
+                  سفارش های من
                 </Button>
-              </Link>
+              )}
             </div>
           </div>
 
           <div className="flex items-center space-x-2 space-x-reverse">
             {/* Desktop User Button - only visible above mdx */}
-            <Link href="/admin/login" className="hidden mdx:block">
+            <Link href="/admin/login" className="hidden lg:block">
               <Button
                 variant="outline"
                 size="sm"
@@ -596,7 +683,7 @@ export function Navigation() {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMobileMenu}
-              className={`mdx:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-300 ${
+              className={`lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-300 ${
                 isMobileMenuOpen ? "rotate-90" : "rotate-0"
               }`}
             >
@@ -628,13 +715,13 @@ export function Navigation() {
 
         {/* Mobile Navigation Menu */}
         <div
-          className={`mdx:hidden transition-all duration-300 ease-in-out overflow-hidden ${
+          className={`lg:hidden transition-all duration-300 ease-in-out overflow-hidden ${
             isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
           }`}
         >
           <hr className="border-gray-200" />
           <div className="py-4">
-            <Link href="/products">
+            <Link href="/products" prefetch={true}>
               <Button
                 variant="ghost"
                 className="w-full text-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
@@ -696,7 +783,7 @@ export function Navigation() {
               )}
             </div>
 
-            <Link href="/about">
+            <Link href="/about" prefetch={true}>
               <Button
                 variant="ghost"
                 className="w-full text-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
@@ -704,7 +791,7 @@ export function Navigation() {
                 درباره ما
               </Button>
             </Link>
-            <Link href="/contact">
+            <Link href="/contact" prefetch={true}>
               <Button
                 variant="ghost"
                 className="w-full text-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
@@ -712,14 +799,46 @@ export function Navigation() {
                 تماس با ما
               </Button>
             </Link>
-            <Link href="/profile">
+            {session ? (
+              <Link href="/profile" prefetch={true} className="w-full">
+                <Button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                    />
+                  </svg>
+                  سفارش های من
+                </Button>
+              </Link>
+            ) : (
               <Button
-                variant="ghost"
-                className="w-full text-start hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                onClick={handleOrderClick}
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
               >
-                پروفایل من
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                  />
+                </svg>
+                سفارش های من
               </Button>
-            </Link>
+            )}
 
             {/* Mobile User Button */}
             <Link href="/admin/login">
@@ -750,30 +869,192 @@ export function Navigation() {
         <div
           className={`transition-all duration-500 ease-in-out overflow-hidden ${
             isSecondSectionVisible
-              ? "max-h-24 opacity-100"
+              ? "max-h-28 opacity-100"
               : "max-h-0 opacity-0"
           }`}
         >
           <hr className="border-gray-200" />
-          <div className="flex items-center justify-between py-2 px-1 flex-col mdx:flex-row gap-4">
+          <div className="flex items-center justify-between py-2 px-1 flex-col lg:flex-row gap-4">
             <div className="flex-1 max-w-md w-full">
               <SearchAutocomplete />
             </div>
-            <div className="flex items-center justify-center gap-2 text-center">
-              <div className="text-gray-600 text-sm mdx:text-base">
-                استعلام قیمت:
+            <div className="flex justify-between items-center gap-2">
+              <div className="lg:hidden">
+              {session ? (
+                <Link href="/profile" prefetch={true} className="w-full">
+                  <Button className="w-full whitespace-nowrap bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                      />
+                    </svg>
+                    سفارش من
+                  </Button>
+                </Link>
+              ) : (
+                <Button
+                  onClick={handleOrderClick}
+                  className="w-full whitespace-nowrap bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                    />
+                  </svg>
+                  سفارش من
+                </Button>
+              )}
               </div>
-              <button
-                dir="ltr"
-                onClick={handlePhoneClick}
-                className="text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer transition-colors font-medium text-sm mdx:text-base"
-              >
-                {phoneNumber}
-              </button>
+             
+              <div className="flex items-center justify-center gap-2 text-center">
+                <div className="text-gray-600 text-sm lg:text-base">
+                  استعلام:
+                </div>
+                <button
+                  dir="ltr"
+                  onClick={handlePhoneClick}
+                  className="text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer transition-colors font-medium text-sm lg:text-base"
+                >
+                  {phoneNumber}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Login Modal */}
+      {showLoginModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[1000] p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold">ورود با شماره تلفن</h2>
+                <button
+                  onClick={() => {
+                    setShowLoginModal(false);
+                    setPhoneNumberLogin("");
+                  }}
+                  className="text-white hover:text-gray-200 transition-colors"
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <p className="text-indigo-100 mt-2 text-sm">
+                لطفاً شماره تلفن خود را وارد کنید
+              </p>
+            </div>
+
+            {/* Form */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handlePhoneLogin();
+              }}
+              className="p-6 space-y-4"
+            >
+              <div>
+                <label
+                  htmlFor="phone-login"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  شماره تماس
+                </label>
+                <input
+                  type="tel"
+                  id="phone-login"
+                  value={phoneNumberLogin}
+                  onChange={(e) => setPhoneNumberLogin(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-center"
+                  placeholder="شماره تلفن همراه..."
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1 text-center">
+                  ایران (09xxxxxxxxx) یا افغانستان (07xxxxxxxx)
+                </p>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setShowLoginModal(false);
+                    setPhoneNumberLogin("");
+                  }}
+                  className="flex-1"
+                  disabled={isLoggingIn}
+                >
+                  انصراف
+                </Button>
+                <Button
+                  type="submit"
+                  className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                  disabled={isLoggingIn}
+                >
+                  {isLoggingIn ? (
+                    <div className="flex items-center space-x-2">
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      <span className="text-white">در حال ورود...</span>
+                    </div>
+                  ) : (
+                    "ورود"
+                  )}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

@@ -100,6 +100,7 @@ export default function CategoriesSection() {
             <Link
               key={category.id}
               href={`/products?category=${category.slug}`}
+              prefetch={true}
               className="group flex flex-col items-center text-center hover:scale-105 transition-all duration-300"
             >
               <div className="relative w-20 h-20 mb-4 rounded-full overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 group-hover:shadow-lg transition-all duration-300">
@@ -148,6 +149,7 @@ export default function CategoriesSection() {
         <div className="text-center mt-16">
           <Link
             href="/products"
+            prefetch={true}
             className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-full hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             مشاهده همه محصولات

@@ -206,7 +206,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-4 text-sm text-gray-300">
               <span className="footer-bottom-text">
-                طراحی و توسعه: Mersad karimi
+                طراحی و توسعه: Mersad Karimi
               </span>
             </div>
           </div>

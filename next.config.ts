@@ -21,6 +21,14 @@ const nextConfig: NextConfig = {
     }
     return config;
   },
+  // Enable experimental features for better performance
+  experimental: {
+    optimizeCss: true,
+  },
+  // Optimize bundle
+  swcMinify: true,
+  // Enable compression
+  compress: true,
 };
 
 export default nextConfig;

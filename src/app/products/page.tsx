@@ -77,7 +77,7 @@ interface ProductsPageProps {
   }>;
 }
 
-const ITEMS_PER_PAGE = 1; // Number of products per page
+const ITEMS_PER_PAGE = 12; // Number of products per page
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const { category, page = "1", search, sort } = await searchParams;

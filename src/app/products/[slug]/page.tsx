@@ -93,38 +93,44 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  // Get category hierarchy for breadcrumb
+  // Get category hierarchy for breadcrumb - optimized single query
   const getCategoryHierarchy = async (
     categoryId: string
   ): Promise<string[]> => {
+    // Fetch category with all parents in a single query using recursive CTE-like approach
+    // We'll use a more efficient approach by fetching the category tree
     const category = await prisma.category.findUnique({
       where: { id: categoryId },
-      include: { parent: true },
+      include: { 
+        parent: {
+          include: {
+            parent: {
+              include: {
+                parent: {
+                  include: {
+                    parent: true // Support up to 5 levels
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
     });
 
     if (!category) return [];
 
-    const hierarchy = [category.name];
-    let currentCategory = category;
+    const hierarchy: string[] = [];
+    let currentCategory: typeof category | null = category;
 
-    while (currentCategory.parent) {
-      hierarchy.unshift(currentCategory.parent.name);
-      // Get the parent category with its parent included
-      const parentCategory = await prisma.category.findUnique({
-        where: { id: currentCategory.parent.id },
-        include: { parent: true },
-      });
-      if (parentCategory) {
-        currentCategory = parentCategory;
-      } else {
-        break;
-      }
+    // Build hierarchy by traversing up the parent chain
+    while (currentCategory) {
+      hierarchy.unshift(currentCategory.name);
+      currentCategory = currentCategory.parent;
     }
 
     return hierarchy;
   };
-
-
 
   const categoryHierarchy = await getCategoryHierarchy(product.categoryId);
 
@@ -148,7 +154,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <nav className="text-sm">
             <ol className="flex items-center space-x-2 space-x-reverse">
               <li>
-                <Link href="/" className="hover:text-yellow-300 transition-colors">
+                <Link href="/" className="hover:text-yellow-300 transition-colors" prefetch={true}>
                   خانه
                 </Link>
               </li>

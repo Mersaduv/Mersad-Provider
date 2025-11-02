@@ -18,7 +18,7 @@ export default function AdminLogin() {
     setError("");
 
     try {
-      const result = await signIn("credentials", {
+      const result = await signIn("admin", {
         email,
         password,
         redirect: false,

@@ -41,7 +41,7 @@ export function ProductCard({
     : category.name;
 
   return (
-    <Link href={`/products/${slug}`} className="block">
+    <Link href={`/products/${slug}`} prefetch={true} className="block">
       <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group relative cursor-pointer">
         {/* Best Selling Badge */}
         {bestSelling && (

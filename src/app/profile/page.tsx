@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface Order {
   id: string;
@@ -32,17 +34,23 @@ const statusColors = {
 };
 
 export default function ProfilePage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
+    if (status === "authenticated" && session?.user?.id) {
+      fetchOrders();
+    } else {
+      setLoading(false);
+    }
+  }, [status, session]);
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('/api/orders');
+      const response = await fetch(`/api/orders?userId=${session?.user?.id}`);
       const data = await response.json();
       
       if (response.ok) {
@@ -66,7 +74,16 @@ export default function ProfilePage() {
     return new Date(dateString).toLocaleDateString('fa-IR');
   };
 
-  if (loading) {
+  const handleLogout = async () => {
+    try {
+      await signOut({ redirect: false });
+      router.push('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
+  if (loading || status === "loading") {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -77,13 +94,46 @@ export default function ProfilePage() {
     );
   }
 
+  if (status === "unauthenticated") {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center bg-white p-8 rounded-lg shadow-lg max-w-md">
+          <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">دسترسی محدود</h2>
+          <p className="text-gray-600 mb-6">برای مشاهده سفارشات خود لطفاً وارد حساب کاربری خود شوید</p>
+          <Link
+            href="/admin/login"
+            className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            ورود به حساب کاربری
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-8">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold">پروفایل من</h1>
-          <p className="text-indigo-100 mt-2">سفارشات و اطلاعات حساب کاربری</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold">پروفایل من</h1>
+              <p className="text-indigo-100 mt-2">سفارشات و اطلاعات حساب کاربری</p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors backdrop-blur-sm"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              خروج
+            </button>
+          </div>
         </div>
       </div>
 
@@ -137,8 +187,12 @@ export default function ProfilePage() {
                           <span className="mr-2">{order.quantity}</span>
                         </div>
                         <div>
-                          <span className="font-medium">قیمت دلخواه:</span>
-                          <span className="mr-2">{formatPrice(order.desiredPrice)} تومان</span>
+                          <span className="font-medium">قیمت کل دلخواه:</span>
+                          <span className="mr-2">{formatPrice(order.desiredPrice)} AFN</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">قیمت هر عدد:</span>
+                          <span className="mr-2">{formatPrice(order.desiredPrice / order.quantity)} AFN</span>
                         </div>
                         <div>
                           <span className="font-medium">تاریخ سفارش:</span>

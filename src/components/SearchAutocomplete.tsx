@@ -164,8 +164,8 @@ export function SearchAutocomplete({
     setShowDropdown(false);
     setSelectedIndex(-1);
     
-    // Navigate to product page using window.location for better reliability
-    window.location.href = `/products/${product.slug}`;
+    // Navigate to product page using Next.js router for client-side navigation
+    router.push(`/products/${product.slug}`);
   };
 
   const updateDropdownPosition = () => {
@@ -303,7 +303,7 @@ export function SearchAutocomplete({
         createPortal(
           <div
             ref={dropdownRef}
-            className="fixed bg-white border border-gray-200 rounded-lg shadow-lg z-[9999] max-h-80 overflow-y-auto md:max-h-80 max-h-60"
+            className="fixed bg-white border border-gray-200 rounded-lg shadow-lg z-[9999] max-h-60 overflow-y-auto md:max-h-80"
             style={{
               top: `${dropdownPosition.top}px`,
               left: `${dropdownPosition.left}px`,
