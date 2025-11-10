@@ -8,7 +8,18 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, description, slug, image, level, order, isActive, parentId } = body;
+    const {
+      name,
+      description,
+      slug,
+      image,
+      level,
+      order,
+      isActive,
+      parentId,
+      showOnHome,
+      homeOrder,
+    } = body;
 
     if (!name || !description || !slug) {
       return NextResponse.json(
@@ -54,6 +65,8 @@ export async function PUT(
         order: order || 0,
         isActive: isActive !== undefined ? isActive : true,
         parentId,
+        showOnHome: showOnHome !== undefined ? Boolean(showOnHome) : undefined,
+        homeOrder: homeOrder !== undefined ? Number(homeOrder) || 0 : undefined,
       },
       include: {
         parent: {

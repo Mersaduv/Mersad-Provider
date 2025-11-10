@@ -13,6 +13,8 @@ interface Category {
   level: number;
   order: number;
   isActive: boolean;
+  showOnHome: boolean;
+  homeOrder: number;
   parentId: string | null;
   children: Array<{
     id: string;
@@ -39,14 +41,20 @@ export default function CategoriesSection() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("/api/categories");
+      const response = await fetch("/api/categories?featured=true");
       if (response.ok) {
         const data = await response.json();
-        // Filter only active categories and main categories (level 0)
-        const mainCategories = data.filter(
-          (cat: Category) => cat.isActive && cat.level === 0
+        // Keep only active categories marked for the homepage
+        const featuredCategories = data.filter(
+          (cat: Category) => cat.isActive && cat.showOnHome
         );
-        setCategories(mainCategories);
+        const sortedCategories = [...featuredCategories].sort((a, b) => {
+          if (a.homeOrder !== b.homeOrder) {
+            return a.homeOrder - b.homeOrder;
+          }
+          return a.name.localeCompare(b.name);
+        });
+        setCategories(sortedCategories);
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -103,7 +111,7 @@ export default function CategoriesSection() {
               prefetch={true}
               className="group flex flex-col items-center text-center hover:scale-105 transition-all duration-300"
             >
-              <div className="relative w-20 h-20 mb-4 rounded-full overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 group-hover:shadow-lg transition-all duration-300">
+              <div className="relative w-48 h-48 mb-4 rounded-full overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 group-hover:shadow-lg transition-all duration-300">
                 {category.image ? (
                   <Image
                     src={category.image}
@@ -114,13 +122,13 @@ export default function CategoriesSection() {
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full">
-                    <div className="text-3xl text-gray-400">📦</div>
+                    <div className="text-9xl text-gray-400">📦</div>
                   </div>
                 )}
               </div>
 
               <div className="flex gap-2 items-center justify-center">
-                <h3 className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
+                <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
                   {category.name}
                 </h3>
 

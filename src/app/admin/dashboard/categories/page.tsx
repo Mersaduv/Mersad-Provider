@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { ToggleSwitch } from "@/components/ui/toggle-switch";
 import Link from "next/link";
 import Image from "next/image";
 import { generateSlug } from "@/lib/utils";
@@ -17,6 +18,8 @@ interface Category {
   level: number;
   order: number;
   isActive: boolean;
+  showOnHome: boolean;
+  homeOrder: number;
   parentId: string | null;
   parent?: {
     id: string;
@@ -55,6 +58,8 @@ export default function CategoriesManagement() {
     level: 0,
     order: 0,
     isActive: true,
+    showOnHome: false,
+    homeOrder: 0,
     parentId: ""
   });
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -160,11 +165,23 @@ export default function CategoriesManagement() {
           parentId: formData.parentId || null,
           level: parseInt(formData.level.toString()),
           order: parseInt(formData.order.toString()),
+          homeOrder: parseInt(formData.homeOrder.toString()),
         }),
       });
 
       if (response.ok) {
-        setFormData({ name: "", description: "", slug: "", image: "", level: 0, order: 0, isActive: true, parentId: "" });
+        setFormData({
+          name: "",
+          description: "",
+          slug: "",
+          image: "",
+          level: 0,
+          order: 0,
+          isActive: true,
+          showOnHome: false,
+          homeOrder: 0,
+          parentId: ""
+        });
         setShowForm(false);
         setEditingId(null);
         fetchCategories();
@@ -189,6 +206,8 @@ export default function CategoriesManagement() {
       level: category.level,
       order: category.order,
       isActive: category.isActive,
+    showOnHome: category.showOnHome,
+    homeOrder: category.homeOrder,
       parentId: category.parentId || ""
     });
     setEditingId(category.id);
@@ -217,7 +236,18 @@ export default function CategoriesManagement() {
   };
 
   const handleCancel = () => {
-    setFormData({ name: "", description: "", slug: "", image: "", level: 0, order: 0, isActive: true, parentId: "" });
+    setFormData({
+      name: "",
+      description: "",
+      slug: "",
+      image: "",
+      level: 0,
+      order: 0,
+      isActive: true,
+      showOnHome: false,
+      homeOrder: 0,
+      parentId: ""
+    });
     setShowForm(false);
     setEditingId(null);
   };
@@ -440,17 +470,49 @@ export default function CategoriesManagement() {
                   </div>
                 </div>
 
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="isActive"
-                    className="mr-2"
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <ToggleSwitch
+                    id="category-isActive"
                     checked={formData.isActive}
-                    onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                    onChange={(checked) => setFormData({ ...formData, isActive: checked })}
+                    label="فعال"
+                    description="در صورت غیرفعال بودن، دسته‌بندی در هیچ بخش نمایش داده نمی‌شود."
                   />
-                  <label htmlFor="isActive" className="text-sm font-medium text-gray-700">
-                    فعال
+                  <ToggleSwitch
+                    id="category-showOnHome"
+                    checked={formData.showOnHome}
+                    onChange={(checked) =>
+                      setFormData({
+                        ...formData,
+                        showOnHome: checked,
+                        homeOrder: checked ? formData.homeOrder : 0,
+                      })
+                    }
+                    label="نمایش در صفحه اصلی"
+                    description="با فعال‌سازی، این دسته در بخش دسته‌بندی‌های صفحه اصلی نمایش داده می‌شود."
+                  />
+                </div>
+
+                <div className="max-w-xs">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    ترتیب نمایش در صفحه اصلی
                   </label>
+                  <input
+                    type="number"
+                    min="0"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={formData.homeOrder}
+                    disabled={!formData.showOnHome}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        homeOrder: parseInt(e.target.value || "0", 10),
+                      })
+                    }
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    ترتیب کوچکتر زودتر نمایش داده می‌شود. فقط برای دسته‌های انتخاب‌شده اعمال می‌شود.
+                  </p>
                 </div>
 
                 <div className="flex gap-2">
@@ -513,6 +575,11 @@ export default function CategoriesManagement() {
                                 غیرفعال
                               </span>
                             )}
+                        {category.showOnHome && (
+                          <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                            صفحه اصلی (ترتیب {category.homeOrder})
+                          </span>
+                        )}
                           </div>
                         </div>
                       </div>

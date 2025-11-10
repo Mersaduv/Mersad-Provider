@@ -1,9 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const searchParams = request.nextUrl.searchParams;
+    const featuredParam = searchParams.get("featured");
+    const levelParam = searchParams.get("level");
+
+    const where: Prisma.CategoryWhereInput = {};
+
+    if (featuredParam === "true") {
+      where.showOnHome = true;
+      where.isActive = true;
+    }
+
+    if (levelParam) {
+      const parsedLevel = Number(levelParam);
+      if (!Number.isNaN(parsedLevel)) {
+        where.level = parsedLevel;
+      }
+    }
+
+    const orderBy: Prisma.CategoryOrderByWithRelationInput[] =
+      featuredParam === "true"
+        ? [
+            { homeOrder: "asc" },
+            { name: "asc" },
+          ]
+        : [
+            { level: "asc" },
+            { order: "asc" },
+            { name: "asc" },
+          ];
+
     const categories = await prisma.category.findMany({
+      where,
       include: {
         parent: {
           select: {
@@ -34,11 +66,7 @@ export async function GET() {
           },
         },
       },
-      orderBy: [
-        { level: 'asc' },
-        { order: 'asc' },
-        { name: 'asc' },
-      ],
+      orderBy,
     });
 
     return NextResponse.json(categories);
@@ -54,7 +82,18 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, description, slug, image, level, order, isActive, parentId } = body;
+    const {
+      name,
+      description,
+      slug,
+      image,
+      level,
+      order,
+      isActive,
+      parentId,
+      showOnHome,
+      homeOrder,
+    } = body;
 
     if (!name || !description || !slug) {
       return NextResponse.json(
@@ -91,6 +130,8 @@ export async function POST(request: NextRequest) {
         order: order || 0,
         isActive: isActive !== undefined ? isActive : true,
         parentId,
+        showOnHome: showOnHome !== undefined ? Boolean(showOnHome) : false,
+        homeOrder: homeOrder !== undefined ? Number(homeOrder) || 0 : 0,
       },
       include: {
         parent: {

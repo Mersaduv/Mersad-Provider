@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { ToggleSwitch } from "@/components/ui/toggle-switch";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -376,18 +377,13 @@ export default function SlidersManagement() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="isActive"
-                  checked={formData.isActive}
-                  onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
-                <label htmlFor="isActive" className="mr-2 block text-sm text-gray-900">
-                  فعال
-                </label>
-              </div>
+              <ToggleSwitch
+                id="slider-isActive"
+                checked={formData.isActive}
+                onChange={(checked) => setFormData({ ...formData, isActive: checked })}
+                label="فعال"
+                description="با غیرفعال کردن، اسلاید در صفحه نمایش داده نخواهد شد."
+              />
             </div>
 
             <div className="flex gap-4">
