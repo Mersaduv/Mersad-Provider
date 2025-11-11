@@ -88,9 +88,11 @@ export default function Slider() {
                 {/* <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div> */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center text-white px-4">
-                    <h2 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg border-2 p-2 rounded-lg bg-blue-500/50">
-                      {slider.title}
-                    </h2>
+                    {slider.title && (
+                      <h2 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg border-2 p-2 rounded-lg bg-blue-500/50">
+                        {slider.title}
+                      </h2>
+                    )}
                   </div>
                 </div>
               </Link>
@@ -106,9 +108,11 @@ export default function Slider() {
                 {/* <div className="absolute inset-0 bg-black/30"></div> */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center text-white px-4">
+                    {slider.title && (
                     <h2 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg border-2 p-2 rounded-lg bg-blue-500/50">
                       {slider.title}
                     </h2>
+                    )}
                   </div>
                 </div>
               </div>
