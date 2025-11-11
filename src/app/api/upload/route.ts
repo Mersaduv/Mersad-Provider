@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
-import { existsSync } from "fs";
+import { put } from "@vercel/blob";
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,16 +32,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), "public", "uploads");
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true });
-    }
-
-    // Create type-specific subdirectory
-    const typeDir = join(uploadsDir, type);
-    if (!existsSync(typeDir)) {
-      await mkdir(typeDir, { recursive: true });
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      console.error("Missing BLOB_READ_WRITE_TOKEN environment variable");
+      return NextResponse.json(
+        { error: "File storage misconfigured. Contact administrator." },
+        { status: 500 }
+      );
     }
 
     // Generate unique filename
@@ -52,21 +46,20 @@ export async function POST(request: NextRequest) {
     const fileExtension = file.name.split('.').pop();
     const fileName = `${type}_${timestamp}_${randomString}.${fileExtension}`;
     
-    // Full path for saving
-    const filePath = join(typeDir, fileName);
-    
     // Convert file to buffer and save
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    
-    await writeFile(filePath, buffer);
 
-    // Return the public URL path
-    const publicPath = `/uploads/${type}/${fileName}`;
+    const blobPath = `uploads/${type}/${fileName}`;
+    const { url } = await put(blobPath, buffer, {
+      contentType: file.type,
+      access: "public",
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    });
 
     return NextResponse.json({
       success: true,
-      imagePath: publicPath,
+      imagePath: url,
       fileName: fileName,
       message: "Image uploaded successfully"
     });

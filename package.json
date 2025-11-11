@@ -22,6 +22,7 @@
     "@auth/prisma-adapter": "^2.10.0",
     "@ckeditor/ckeditor5-build-decoupled-document": "^41.4.2",
     "@ckeditor/ckeditor5-react": "^11.0.0",
+    "@vercel/blob": "^0.27.0",
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^3.0.2",
     "clsx": "^2.1.1",
