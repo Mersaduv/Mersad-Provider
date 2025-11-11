@@ -121,7 +121,7 @@ export default function Slider() {
         <div className="swiper-button-next !text-white !w-12 !h-12 !mt-0 !top-1/2 !-translate-y-1/2 !left-4 !right-auto !bg-black/20 !backdrop-blur-sm !rounded-full !border !border-white/30 hover:!bg-black/40 transition-all duration-300"></div>
         
         {/* Custom Pagination */}
-        <div className="swiper-pagination !bottom-4"></div>
+        <div className="swiper-pagination !bottom-4"></div> 
       </Swiper>
 
       <style jsx global>{`
