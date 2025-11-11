@@ -39,18 +39,17 @@ Run the database migrations:
 npx prisma migrate dev
 ```
 
-### 4. Seed the Database
+### 4. Ensure Admin User
 
-Create an admin user and sample data:
+Create or update the default admin account:
 
 ```bash
 npm run seed
 ```
 
-This will create:
-- Admin user: `admin@example.com` / `admin123`
-- Sample categories (Electronics, Clothing)
-- Sample attributes linked to categories
+This command only ensures the default admin user exists:
+- Email: `admin@example.com`
+- Password: `admin123`
 
 ### 5. Start the Development Server
 
@@ -63,7 +62,7 @@ npm run dev
 ### Admin Login
 
 1. Navigate to `/admin/login`
-2. Use the credentials from the seed:
+2. Use the default credentials:
    - Email: `admin@example.com`
    - Password: `admin123`
 
@@ -110,16 +109,19 @@ After successful login, you'll be redirected to `/admin/dashboard` where you can
 
 To add more admin users, you can either:
 
-1. **Modify the seed script** and re-run it
-2. **Use Prisma Studio** to manually add users
-3. **Create a separate admin creation script**
+1. Run the helper script:
+   ```bash
+   npm run create-admin -- --email new-admin@example.com --password strongPass123 --name "مدیر جدید"
+   ```
+2. Use Prisma Studio to manually add users
+3. Create a dedicated admin creation workflow inside the app
 
 ### Changing Admin Credentials
 
-Update the seed script with new credentials and re-run:
+Run the admin creation script with new credentials:
 
 ```bash
-npm run seed
+npm run create-admin -- --email admin@example.com --password newPassword123 --name "Admin User"
 ```
 
 ## Troubleshooting

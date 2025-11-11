@@ -21,12 +21,12 @@ try {
   process.exit(1);
 }
 
-console.log('🌱 Seeding database...');
+console.log('👤 Ensuring admin user exists...');
 try {
-  execSync('node seed-sample-data.js', { stdio: 'inherit' });
-  console.log('✅ Database seeded successfully');
+  execSync('node create-admin.js', { stdio: 'inherit' });
+  console.log('✅ Admin user ensured successfully');
 } catch (error) {
-  console.error('❌ Error seeding database:', error.message);
+  console.error('❌ Error ensuring admin user:', error.message);
   process.exit(1);
 }
 
