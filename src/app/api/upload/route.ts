@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!process.env.BLOB_READ_WRITE_TOKEN) {
-      console.error("Missing BLOB_READ_WRITE_TOKEN environment variable");
+      console.error("Missing BLOB_READ_WRITE_TOKEN environment variable..");
       return NextResponse.json(
         { error: "File storage misconfigured. Contact administrator." },
         { status: 500 }
