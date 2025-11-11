@@ -111,7 +111,7 @@ export default function CategoriesSection() {
               prefetch={true}
               className="group flex flex-col items-center text-center hover:scale-105 transition-all duration-300"
             >
-              <div className="relative w-48 h-48 mb-4 rounded-full overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 group-hover:shadow-lg transition-all duration-300">
+              <div className="relative w-44 h-44 sm:w-48 sm:h-48 mb-4 rounded-full overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 group-hover:shadow-lg transition-all duration-300">
                 {category.image ? (
                   <Image
                     src={category.image}
@@ -122,7 +122,7 @@ export default function CategoriesSection() {
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full">
-                    <div className="text-9xl text-gray-400">📦</div>
+                    <div className="text-7xl sm:text-9xl text-gray-400">📦</div>
                   </div>
                 )}
               </div>
