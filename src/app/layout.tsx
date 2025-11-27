@@ -16,14 +16,14 @@ const vazirmatn = Vazirmatn({
 
 export const metadata: Metadata = {
   title: {
-    default: "شرکت بازرگانی مرصاد",
-    template: "%s | شرکت بازرگانی مرصاد",
+    default: "شرکت مرصاد لمیتد",
+    template: "%s | شرکت مرصاد لمیتد",
   },
-  description: "سایت ساخته شده با Next.js و Prisma - شرکت بازرگانی مرصاد محصولات و خدمات",
+  description: "سایت ساخته شده با Next.js و Prisma - شرکت مرصاد لمیتد محصولات و خدمات",
   keywords: ["Next.js", "Prisma", "فارسی", "محصولات", "فروشگاه"],
-  authors: [{ name: "شرکت بازرگانی مرصاد" }],
-  creator: "شرکت بازرگانی مرصاد",
-  publisher: "شرکت بازرگانی مرصاد",
+  authors: [{ name: "شرکت مرصاد لمیتد" }],
+  creator: "شرکت مرصاد لمیتد",
+  publisher: "شرکت مرصاد لمیتد",
   formatDetection: {
     email: false,
     address: false,
@@ -34,14 +34,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fa_IR",
     url: "/",
-    siteName: "شرکت بازرگانی مرصاد",
-    title: "شرکت بازرگانی مرصاد",
-    description: "سایت ساخته شده با Next.js و Prisma - شرکت بازرگانی مرصاد محصولات و خدمات",
+    siteName: "شرکت مرصاد لمیتد",
+    title: "شرکت مرصاد لمیتد",
+    description: "سایت ساخته شده با Next.js و Prisma - شرکت مرصاد لمیتد محصولات و خدمات",
   },
   twitter: {
     card: "summary_large_image",
-    title: "شرکت بازرگانی مرصاد",
-    description: "سایت ساخته شده با Next.js و Prisma - شرکت بازرگانی مرصاد محصولات و خدمات",
+    title: "شرکت مرصاد لمیتد",
+    description: "سایت ساخته شده با Next.js و Prisma - شرکت مرصاد لمیتد محصولات و خدمات",
   },
   robots: {
     index: true,

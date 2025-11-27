@@ -571,7 +571,7 @@ export function Navigation() {
                   className="w-16 h-16"
                 />
               </div>
-              <h1> شرکت بازرگانی مرصاد</h1>
+              <h1>شرکت مرصاد لمیتد</h1>
             </Link>
 
             {/* Desktop Navigation */}

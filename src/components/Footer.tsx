@@ -12,11 +12,11 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <div className="mb-6">
               <h3 className="footer-section-title text-xl font-bold mb-4 text-white pb-2 inline-block">
-                شرکت بازرگانی مرصاد
+                شرکت مرصاد لمیتد
               </h3>
               <p className="footer-company-text text-gray-200 leading-relaxed text-sm">
                 از سال 1400 فعالیت خود را آغاز کرده و با تکیه بر تجربه و تخصص،
-                به یکی از پیشروان صنعت بازرگانی تبدیل شده‌ایم. هدف ما ارائه
+                به یکی از پیشروان صنعت لمیتد تبدیل شده‌ایم. هدف ما ارائه
                 بهترین خدمات و محصولات با کیفیت به مشتریان است.{" "}
               </p>
             </div>
@@ -25,7 +25,7 @@ export default function Footer() {
           {/* Contact Information Section */}
           <div className="lg:col-span-1">
             <h3 className="footer-section-title text-xl font-bold mb-4 text-white pb-2 inline-block">
-              تماس با شرکت بازرگانی مرصاد
+              تماس با شرکت مرصاد لمیتد
             </h3>
 
             {/* Herat Office */}
@@ -109,7 +109,7 @@ export default function Footer() {
                 href="/about"
                 className="footer-link block text-gray-200 hover:text-orange-300 transition-colors text-sm hover:translate-x-1 transform duration-200"
               >
-                درباره شرکت بازرگانی مرصاد
+                درباره شرکت مرصاد لمیتد
               </Link>
               <Link
                 href="/articles"
@@ -202,7 +202,7 @@ export default function Footer() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="footer-bottom-text text-gray-300 text-sm text-center md:text-right">
-              © {new Date().getFullYear()} شرکت بازرگانی مرصاد. تمامی حقوق محفوظ است.
+              © {new Date().getFullYear()} شرکت مرصاد لمیتد. تمامی حقوق محفوظ است.
             </p>
             <div className="flex items-center gap-4 text-sm text-gray-300">
               <span className="footer-bottom-text">

@@ -14,10 +14,10 @@ import Link from 'next/link'
 // }
 
 export const metadata: Metadata = {
-  title: 'مقالات و راهنماها - شرکت بازرگانی مرصاد',
+  title: 'مقالات و راهنماها - شرکت مرصاد لمیتد',
   description: 'مجموعه مقالات و راهنماهای مفید برای شما',
   openGraph: {
-    title: 'مقالات و راهنماها - شرکت بازرگانی مرصاد',
+    title: 'مقالات و راهنماها - شرکت مرصاد لمیتد',
     description: 'مجموعه مقالات و راهنماهای مفید برای شما',
     type: 'website',
     locale: 'fa_IR',

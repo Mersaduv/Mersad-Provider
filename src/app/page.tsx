@@ -6,19 +6,19 @@ import { Metadata } from "next";
 import AboutSection from "@/components/AboutSection";
 
 export const metadata: Metadata = {
-  title: "خانه - شرکت بازرگانی مرصاد",
+  title: "خانه - شرکت مرصاد لمیتد",
   description:
     ".",
-  keywords: ["بازرگانی", "شرکت تتمین کننده", "فارسی", "محصولات"],
+  keywords: ["شرکت مرصاد لمیتد", "فارسی", "محصولات"],
   openGraph: {
-    title: "خانه - شرکت بازرگانی مرصاد",
+    title: "خانه - شرکت مرصاد لمیتد", 
     description: "",
     type: "website",
     locale: "fa_IR",
   },
   twitter: {
     card: "summary_large_image",
-    title: "خانه - شرکت بازرگانی مرصاد",
+    title: "خانه - شرکت مرصاد لمیتد",
     description: "",
   },
 };

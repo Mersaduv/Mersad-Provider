@@ -12,7 +12,7 @@ export default function AboutSection() {
             درباره ما
           </h2>
           <p className="text-white/90 text-lg max-w-3xl mx-auto leading-relaxed">
-            شرکت بازرگانی مرصاد با سال‌ها تجربه در زمینه تجارت و بازرگانی،
+            شرکت مرصاد لمیتد با سال‌ها تجربه در زمینه تجارت لمیتد،
             ارائه‌دهنده بهترین خدمات و محصولات با کیفیت به مشتریان خود است
           </p>
         </div>
@@ -44,7 +44,7 @@ export default function AboutSection() {
               </div>
               <p className="text-gray-700 leading-relaxed">
                 از سال 1400 فعالیت خود را آغاز کرده و با تکیه بر تجربه و تخصص،
-                به یکی از پیشروان صنعت بازرگانی تبدیل شده‌ایم. هدف ما ارائه
+                به یکی از پیشروان صنعت لمیتد تبدیل شده‌ایم. هدف ما ارائه
                 بهترین خدمات و محصولات با کیفیت به مشتریان است.
               </p>
             </div>
@@ -128,7 +128,7 @@ export default function AboutSection() {
               <div className="rounded-3xl overflow-hidden">
                 <Image
                   src="/images/logo.png"
-                  alt="شرکت بازرگانی مرصاد"
+                  alt="شرکت مرصاد لمیتد"
                   width={600}
                   height={600}
                   className="w-2/3 h-auto object-cover about-image-hover mx-auto"
