@@ -134,7 +134,7 @@ export default function Footer() {
                   <div className="w-6 h-6 flex items-center justify-center">
                     <svg
                       className="w-5 h-5 text-white"
-                      fill="currentColor"
+                      fill="currentColor" 
                       viewBox="0 0 24 24"
                     >
                       <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.568 8.16l-1.61 7.59c-.12.54-.44.68-.89.42l-2.46-1.81-1.19 1.15c-.13.13-.24.24-.49.24l.18-2.56 4.57-4.12c.2-.18-.04-.28-.31-.1l-5.65 3.56-2.44-.76c-.53-.16-.54-.53.11-.79l9.57-3.69c.44-.16.83.1.69.79z" />
