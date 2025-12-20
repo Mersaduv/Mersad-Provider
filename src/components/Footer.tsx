@@ -141,7 +141,7 @@ export default function Footer() {
                     </svg>
                   </div>
                   <span className="text-white font-medium text-sm group-hover:text-white">
-                    تلگرام
+                    تلگرام 
                   </span>
                 </a>
 
