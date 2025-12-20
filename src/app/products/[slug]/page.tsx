@@ -213,6 +213,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <OrderButton
                   productId={product.id}
                   productName={product.name}
+                  productPrice={product.price ?? undefined}
                 />
               </div>
             </div>

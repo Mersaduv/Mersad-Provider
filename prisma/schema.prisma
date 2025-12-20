@@ -59,6 +59,7 @@ model Product {
   imageUrls   String[]
   description String
   categoryId  String
+  price       Float?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   bestSelling Boolean  @default(false)

@@ -5,15 +5,16 @@ import { useOrderModal } from "@/contexts/OrderModalContext";
 interface OrderButtonProps {
   productId: string;
   productName: string;
+  productPrice?: number;
   userId?: string;
 }
 
-export function OrderButton({ productId, productName, userId }: OrderButtonProps) {
+export function OrderButton({ productId, productName, productPrice, userId }: OrderButtonProps) {
   const { openModal } = useOrderModal();
 
   return (
     <button
-      onClick={() => openModal(productId, productName, userId)}
+      onClick={() => openModal(productId, productName, userId, productPrice)}
       className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3 space-x-reverse"
     >
       {/* <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

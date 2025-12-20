@@ -4,10 +4,11 @@ import { createContext, useContext, useState, ReactNode } from "react";
 
 interface OrderModalContextType {
   isModalOpen: boolean;
-  openModal: (productId: string, productName: string, userId?: string) => void;
+  openModal: (productId: string, productName: string, userId?: string, productPrice?: number) => void;
   closeModal: () => void;
   productId: string;
   productName: string;
+  productPrice?: number;
   userId?: string;
 }
 
@@ -19,15 +20,18 @@ export function OrderModalProvider({ children }: { children: ReactNode }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productId, setProductId] = useState("");
   const [productName, setProductName] = useState("");
+  const [productPrice, setProductPrice] = useState<number | undefined>(undefined);
   const [userId, setUserId] = useState<string | undefined>(undefined);
 
   const openModal = (
     prodId: string,
     prodName: string,
-    usrId?: string
+    usrId?: string,
+    prodPrice?: number
   ) => {
     setProductId(prodId);
     setProductName(prodName);
+    setProductPrice(prodPrice);
     setUserId(usrId);
     setIsModalOpen(true);
   };
@@ -38,6 +42,7 @@ export function OrderModalProvider({ children }: { children: ReactNode }) {
     setTimeout(() => {
       setProductId("");
       setProductName("");
+      setProductPrice(undefined);
       setUserId(undefined);
     }, 300); // Wait for modal close animation
   };
@@ -50,6 +55,7 @@ export function OrderModalProvider({ children }: { children: ReactNode }) {
         closeModal,
         productId,
         productName,
+        productPrice,
         userId,
       }}
     >

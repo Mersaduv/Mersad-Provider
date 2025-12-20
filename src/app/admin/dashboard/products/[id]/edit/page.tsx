@@ -12,6 +12,7 @@ interface ProductResponse {
   description: string;
   imageUrls: string[];
   categoryId: string;
+  price?: number;
   bestSelling: boolean;
 }
 
@@ -59,6 +60,7 @@ export default function EditProductPage() {
           description: productData.description,
           imageUrls: productData.imageUrls ?? [],
           categoryId: productData.categoryId,
+          price: productData.price ?? undefined,
           bestSelling: productData.bestSelling ?? false,
         });
       } else if (productRes.status === 404) {

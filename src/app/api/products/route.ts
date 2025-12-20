@@ -64,6 +64,8 @@ export async function POST(request: NextRequest) {
         description: json.description,
         imageUrls: json.imageUrls || [],
         categoryId: json.categoryId,
+        price: json.price !== undefined ? parseFloat(json.price) : null,
+        bestSelling: json.bestSelling !== undefined ? json.bestSelling : false,
       },
       include: {
         category: true,

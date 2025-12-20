@@ -21,6 +21,7 @@ export interface AdminProduct {
   description: string;
   imageUrls: string[];
   categoryId: string;
+  price?: number;
   bestSelling: boolean;
 }
 
@@ -47,6 +48,7 @@ export function ProductForm({
     description: initialProduct?.description ?? "",
     imageUrls: initialProduct?.imageUrls ?? [],
     categoryId: initialProduct?.categoryId ?? "",
+    price: initialProduct?.price ?? undefined,
     bestSelling: initialProduct?.bestSelling ?? false,
   });
   const [loading, setLoading] = useState(false);
@@ -236,6 +238,31 @@ export function ProductForm({
               </select>
             </div>
 
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                قیمت محصول (افغانی)
+              </label>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={formData.price ?? ""}
+                onChange={(event) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    price: event.target.value ? parseFloat(event.target.value) : undefined,
+                  }))
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="قیمت محصول را وارد کنید"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                این قیمت به عنوان قیمت پیش‌فرض در مودال سفارش نمایش داده می‌شود
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 وضعیت محصول

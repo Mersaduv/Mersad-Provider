@@ -53,6 +53,7 @@ export async function PUT(
         description: json.description,
         imageUrls: json.imageUrls || [],
         categoryId: json.categoryId,
+        price: json.price !== undefined ? (json.price === null || json.price === "" ? null : parseFloat(json.price)) : undefined,
         bestSelling: json.bestSelling !== undefined ? json.bestSelling : false,
       },
       include: {

@@ -10,6 +10,7 @@ interface OrderModalProps {
   onClose?: () => void;
   productId?: string;
   productName?: string;
+  productPrice?: number;
   userId?: string;
 }
 
@@ -18,6 +19,7 @@ export function OrderModal({
   onClose: propOnClose,
   productId: propProductId,
   productName: propProductName,
+  productPrice: propProductPrice,
   userId: propUserId,
 }: OrderModalProps = {}) {
   // Use context for global modal, but allow props override for backward compatibility
@@ -26,12 +28,43 @@ export function OrderModal({
   const onClose = propOnClose !== undefined ? propOnClose : context.closeModal;
   const productId = propProductId !== undefined ? propProductId : context.productId;
   const productName = propProductName !== undefined ? propProductName : context.productName;
+  const productPrice = propProductPrice !== undefined ? propProductPrice : context.productPrice;
   const userId = propUserId !== undefined ? propUserId : context.userId;
+  
+  // Initialize formData with product price as default if available
   const [formData, setFormData] = useState({
-    quantity: 10,
-    desiredPrice: "",
+    quantity: 1,
+    desiredPrice: productPrice !== undefined && productPrice !== null ? (productPrice * 1).toString() : "",
     customerPhone: "",
   });
+
+  // Update desiredPrice when productPrice changes (when modal opens with a new product)
+  useEffect(() => {
+    if (isOpen) {
+      if (productPrice !== undefined && productPrice !== null) {
+        setFormData((prev) => ({
+          ...prev,
+          desiredPrice: (productPrice * prev.quantity).toString(),
+        }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          desiredPrice: "",
+        }));
+      }
+    } else {
+      // Reset form when modal closes
+      setFormData({
+        quantity: 1,
+        desiredPrice: "",
+        customerPhone: "",
+      });
+      setShowQuantityDropdown(false);
+      setQuantitySearch("");
+      setSubmitMessage("");
+      setOrderReceipt(null);
+    }
+  }, [isOpen, productPrice]);
   const [showQuantityDropdown, setShowQuantityDropdown] = useState(false);
   const [quantitySearch, setQuantitySearch] = useState("");
   const quantityRef = useRef<HTMLDivElement>(null);
@@ -46,7 +79,7 @@ export function OrderModal({
     createdAt: string;
   } | null>(null);
 
-  const quantityOptions = [10, 20, 30, 50, 100, 200, 300, 500, 1000, 2000];
+  const quantityOptions = [1, 10, 20, 30, 50, 100, 200, 300, 500, 1000, 2000];
 
   // Format number to Persian readable format with commas
   const formatNumber = (num: number): string => {
@@ -280,8 +313,8 @@ export function OrderModal({
 
         // Reset form
         setFormData({
-          quantity: 10,
-          desiredPrice: "",
+          quantity: 1,
+          desiredPrice: productPrice !== undefined && productPrice !== null ? (productPrice * 1).toString() : "",
           customerPhone: "",
         });
         setShowQuantityDropdown(false);
@@ -468,7 +501,17 @@ export function OrderModal({
                       numValue > 0 &&
                       numValue !== formData.quantity
                     ) {
-                      setFormData((prev) => ({ ...prev, quantity: numValue }));
+                      setFormData((prev) => {
+                        const newQuantity = numValue;
+                        const newPrice = productPrice !== undefined && productPrice !== null 
+                          ? (productPrice * newQuantity).toString() 
+                          : prev.desiredPrice;
+                        return { 
+                          ...prev, 
+                          quantity: newQuantity,
+                          desiredPrice: newPrice
+                        };
+                      });
                     }
                   }}
                   onFocus={() => {
@@ -493,7 +536,16 @@ export function OrderModal({
                         key={qty}
                         type="button"
                         onClick={() => {
-                          setFormData((prev) => ({ ...prev, quantity: qty }));
+                          setFormData((prev) => {
+                            const newPrice = productPrice !== undefined && productPrice !== null 
+                              ? (productPrice * qty).toString() 
+                              : prev.desiredPrice;
+                            return { 
+                              ...prev, 
+                              quantity: qty,
+                              desiredPrice: newPrice
+                            };
+                          });
                           setQuantitySearch("");
                           setShowQuantityDropdown(false);
                           if (submitMessage) setSubmitMessage("");
