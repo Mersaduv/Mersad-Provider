@@ -126,7 +126,7 @@ export default function Footer() {
               {/* Social Media Icons */}
               <div className="space-y-3">
                 <a
-                  href="https://t.me/mersadltd"
+                  href="https://t.me/mersadltd" //@mersadltd
                   target="_blank"
                   rel="noopener noreferrer"
                   className="footer-social-icon flex items-center gap-3 p-3 bg-sky-500 hover:bg-sky-600 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg group"
@@ -141,7 +141,7 @@ export default function Footer() {
                     </svg>
                   </div>
                   <span className="text-white font-medium text-sm group-hover:text-white">
-                    تلگرام 
+                    تلگرام  
                   </span>
                 </a>
 
@@ -166,7 +166,7 @@ export default function Footer() {
                 </a>
 
                 <a
-                  href="https://instagram.com/mersad.ltd"
+                  href="https://instagram.com/mersad.ltd" //@mersad.ltd
                   target="_blank"   
                   rel="noopener noreferrer"
                   className="footer-social-icon flex items-center gap-3 p-3 bg-purple-500 hover:bg-purple-600 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg group"
