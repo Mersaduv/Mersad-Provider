@@ -126,7 +126,7 @@ export default function Footer() {
               {/* Social Media Icons */}
               <div className="space-y-3">
                 <a
-                  href="https://t.me/mersad_ai"
+                  href="https://t.me/mersadltd"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="footer-social-icon flex items-center gap-3 p-3 bg-sky-500 hover:bg-sky-600 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg group"
@@ -166,7 +166,7 @@ export default function Footer() {
                 </a>
 
                 <a
-                  href="https://instagram.com/mersadmai"
+                  href="https://instagram.com/mersad.ltd"
                   target="_blank"   
                   rel="noopener noreferrer"
                   className="footer-social-icon flex items-center gap-3 p-3 bg-purple-500 hover:bg-purple-600 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg group"
@@ -189,7 +189,7 @@ export default function Footer() {
               {/* Brand Name */}
               <div className="pt-4 border-t border-gray-600">
                 <p className="text-gray-300 text-sm font-medium">
-                  mersadmai
+                  mersad ltd
                 </p>
               </div>
             </div>

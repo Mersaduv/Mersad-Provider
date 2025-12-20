@@ -306,7 +306,7 @@ export default function ContactPage() {
                   <h3 className="contact-info-card-title">شبکه‌های اجتماعی</h3>
                   <div className="flex flex-wrap gap-3 mt-3">
                     <a
-                      href="https://t.me/mersad_ai"
+                      href="https://t.me/mersadltd"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="contact-social-link bg-sky-500 hover:bg-sky-600"
@@ -328,7 +328,7 @@ export default function ContactPage() {
                       <span>واتساپ</span>
                     </a>
                     <a
-                      href="https://instagram.com/mersadmai"
+                      href="https://instagram.com/mersad.ltd"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="contact-social-link bg-purple-500 hover:bg-purple-600"
